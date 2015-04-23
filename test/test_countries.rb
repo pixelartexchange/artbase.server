@@ -2,31 +2,30 @@
 
 ###
 #  to run use
-#     ruby -I ./lib -I ./test test/test_pak.rb
+#     ruby -I ./lib -I ./test test/test_countries.rb
 
 
 require 'helper'
 
-class TestPak < MiniTest::Test
+class TestCountries < MiniTest::Test
 
-  def test_s_and_p_500_companies
+  def test_country_list
 
-    pak = Datapak::Pak.new( './pak/s-and-p-500-companies/datapackage.json' )
+    pak = Datapak::Pak.new( './pak/country-list/datapackage.json' )
 
     puts "name: #{pak.name}"
     puts "title: #{pak.title}"
     puts "license: #{pak.license}"
 
     pp pak.tables
-    pp pak.table[0]['Symbol']
-    pp pak.table[495]['Symbol']
+    ## pp pak.table[0]['Symbol']
+    ## pp pak.table[495]['Symbol']
 
     ## pak.table.each do |row|
     ##  pp row
     ## end
 
-    puts pak.tables[0].dump_schema
-    puts pak.tables[1].dump_schema
+    puts pak.table.dump_schema
 
     # database setup 'n' config
     ActiveRecord::Base.establish_connection( adapter:  'sqlite3', database: ':memory:' )
@@ -35,13 +34,9 @@ class TestPak < MiniTest::Test
     pak.table.up!
     pak.table.import!
 
-    pak.tables[1].up!
-    pak.tables[1].import!
-
-
     pp pak.table.ar_clazz
 
-
+=begin
     company = pak.table.ar_clazz
 
     puts "Company.count: #{company.count}"
@@ -50,12 +45,10 @@ class TestPak < MiniTest::Test
     pp company.find_by!( name: '3M Co' )
     pp company.where( sector: 'Industrials' ).count
     pp company.where( sector: 'Industrials' ).all
-
-
-    ### todo: try a join w/ belongs_to ??
+=end
 
     assert true  # if we get here - test success
   end
 
-end # class TestPak
+end # class TestCountries
 

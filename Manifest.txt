@@ -4,6 +4,9 @@ README.md
 Rakefile
 lib/datapak.rb
 lib/datapak/datapak.rb
+lib/datapak/downloader.rb
 lib/datapak/version.rb
 test/helper.rb
-test/test_pak.rb
+test/test_companies.rb
+test/test_countries.rb
+test/test_downloader.rb

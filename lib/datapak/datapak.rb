@@ -8,9 +8,14 @@ module Datapak
 class Pak
   ## load (tabular) datapackage into memory
   def initialize( path )
+    
+    ## convenience
+    ## - check: if path is a folder/directory
+    ##    (auto-)add  /datapackage.json
+
     text = File.read( path )
     @h = JSON.parse( text )
-    
+
     pak_dir = File.dirname(path)
 
     ## pp @h
