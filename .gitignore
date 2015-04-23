@@ -4,3 +4,11 @@ pkg/
 doc/
 
 
+################
+# ignore datapackage folders
+
+pak/
+.pak/
+datapackage/
+.datapackage/
+

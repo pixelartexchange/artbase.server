@@ -6,7 +6,7 @@ yet another library to work with tabular data packages (*.csv files w/ datapacka
 * bugs  :: [github.com/textkit/datapak/issues](https://github.com/textkit/datapak/issues)
 * gem   :: [rubygems.org/gems/datapak](https://rubygems.org/gems/datapak)
 * rdoc  :: [rubydoc.info/gems/datapak](http://rubydoc.info/gems/datapak)
-* forum :: [ruby-talk@ruby-lang.org](www.ruby-lang.org/en/community/mailing-lists/)
+* forum :: [ruby-talk@ruby-lang.org](http://www.ruby-lang.org/en/community/mailing-lists/)
 
 
 ## Usage

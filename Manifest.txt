@@ -3,4 +3,7 @@ Manifest.txt
 README.md
 Rakefile
 lib/datapak.rb
+lib/datapak/datapak.rb
 lib/datapak/version.rb
+test/helper.rb
+test/test_pak.rb
