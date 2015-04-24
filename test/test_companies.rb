@@ -46,7 +46,7 @@ class TestCompanies < MiniTest::Test
 
     puts "Company.count: #{company.count}"
     pp company.first
-    pp company.find_by!( symbol: 'ABT' )
+    pp company.find_by!( symbol: 'MMM' )
     pp company.find_by!( name: '3M Co' )
     pp company.where( sector: 'Industrials' ).count
     pp company.where( sector: 'Industrials' ).all

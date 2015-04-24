@@ -10,7 +10,6 @@ require 'helper'
 class TestCountries < MiniTest::Test
 
   def test_country_list
-
     pak = Datapak::Pak.new( './pak/country-list/datapackage.json' )
 
     puts "name: #{pak.name}"

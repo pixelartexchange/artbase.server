@@ -108,19 +108,21 @@ class Tab
     i=0
     @data.each do |row|
       i+=1
-      next if i > 3   ## for testing; only insert a couple of recs
+      ## next if i > 3   ## for testing; only insert a couple of recs
 
       ## todo: check if all string is ok; or number/date/etc. conversion needed/required?
       values = []
       row.fields.each_with_index do |value,index|   # get array of values
         type = column_types[index]
         ## todo add boolean ??  
-        if [:number,:float,:integer].include?( type )
+        if value.blank?
+          values << 'NULL'
+        elsif [:number,:float,:integer].include?( type )
           values << value           ## do NOT wrap in quotes (numeric)
         else
-          values << "'#{value}'"    ## wrap in quotes
+          esc_value = value.gsub( "'", "''" )  ## escape quotes e.g. ' becomse \'\', that is, double quotes
+          values << "'#{esc_value}'"    ## wrap in quotes
         end
-        
       end
       pp values
 
