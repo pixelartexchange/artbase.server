@@ -10,3 +10,4 @@ test/helper.rb
 test/test_companies.rb
 test/test_countries.rb
 test/test_downloader.rb
+test/test_import.rb

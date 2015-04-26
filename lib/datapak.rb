@@ -27,14 +27,23 @@ require 'datapak/downloader'
 module Datapak
   
   def self.import(*args)
-    ## to be done
-
     ## step 1: download
+    dl = Downloader.new
+    args.each do |arg|
+      dl.fetch( arg )
+    end
+
     ## step 2: up 'n' import
+    args.each do |arg|
+      pak = Pak.new( "./pak/#{arg}/datapackage.json" )
+      pak.tables.each do |table|
+        table.up!
+        table.import!
+      end
+    end
   end
 
 end # module Datapak
-
 
 
 

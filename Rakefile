@@ -18,6 +18,9 @@ Hoe.spec 'datapak' do
   self.history_file = 'HISTORY.md'
 
   self.extra_deps = [
+    ['logutils', '>=0.6.1'],
+    ['fetcher', '>=0.4.5'],
+    ['activerecord'],
   ]
 
   self.licenses = ['Public Domain']

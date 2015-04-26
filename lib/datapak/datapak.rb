@@ -42,6 +42,11 @@ class Pak
     name          = h['name']
     relative_path = h['path']
 
+    if relative_path.nil?
+      relative_path = "#{name}.csv"
+      puts "  warn: no path defined; using fallback '#{relative_path}'"
+    end
+
     puts "  reading resource (table) #{name} (#{relative_path})..."
     pp h
 
@@ -73,9 +78,12 @@ class Tab
     printer.text "Tab<#{object_id} @data.name=#{name}, @data.size=#{@data.size}>"
   end
 
+
   def up!
     # run Migration#up to create table
+    connect!
     con = ActiveRecord::Base.connection
+
     con.create_table sanitize_name( name ) do |t|
       @h['schema']['fields'].each do |f|
         column_name = sanitize_name(f['name'])
@@ -90,9 +98,9 @@ class Tab
   end
 
   def import!
-     ### note: import via sql for (do NOT use ActiveRecord record class for now)
+    connect!
     con = ActiveRecord::Base.connection
-    
+
     column_names = []
     column_types = []
     column_placeholders = []
@@ -200,7 +208,7 @@ class Tab
     ##  e.g. 52 Week Price  => becomes  _52_week_price
     
     ident = ident.strip.downcase
-    ident = ident.gsub( /[\-\/]/, '_' )  ## convert some special chars to underscore (e.g. dash -)
+    ident = ident.gsub( /[\.\-\/]/, '_' )  ## convert some special chars to underscore (e.g. dash -)
     ident = ident.gsub( ' ', '_' )
     ident = ident.gsub( /[^a-z0-9_]/, '' )
     ident = "_#{ident}"  if ident =~ /^[0-9]/
@@ -218,6 +226,19 @@ class Tab
       clazz
     end
     @ar_clazz
+  end
+
+private
+
+  ## helper to get connection; if not connection established use defaults
+  def connect!
+    ## todo: cache returned con - why, why not ??
+    unless ActiveRecord::Base.connected?
+      puts "note: no database connection established; using defaults (e.g. in-memory SQLite database)"
+      ActiveRecord::Base.establish_connection( adapter:  'sqlite3', database: ':memory:' )
+      ActiveRecord::Base.logger = Logger.new( STDOUT )
+    end
+    ActiveRecord::Base.connection
   end
 
 end # class Tab
