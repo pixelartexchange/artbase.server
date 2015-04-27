@@ -21,10 +21,9 @@ yet another library to work with tabular data packages (*.csv files w/ datapacka
 > - Metadata about the dataset both general (e.g. title, author)
 >   and the specific data files (e.g. schema) is stored in a single JSON file
 >   named `datapackage.json` which follows the Data Package format
->
-> <!-- break -->
->
-> (Source: [Tabular Data Packages, Open Knowledge Foundation](http://data.okfn.org/doc/tabular-data-package))
+
+(Source: [Tabular Data Packages, Open Knowledge Foundation](http://data.okfn.org/doc/tabular-data-package))
+
 
 Here's a minimal example of a tabular data package holding two files, that is, `data.csv` and `datapackage.json`:
  
