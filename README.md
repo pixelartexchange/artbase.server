@@ -21,13 +21,46 @@ yet another library to work with tabular data packages (*.csv files w/ datapacka
 > - Metadata about the dataset both general (e.g. title, author)
 >   and the specific data files (e.g. schema) is stored in a single JSON file
 >   named `datapackage.json` which follows the Data Package format
->
->  (Source: [Tabular Data Packages, Open Knowledge Foundation](http://data.okfn.org/doc/tabular-data-package))
+
+(Source: [Tabular Data Packages, Open Knowledge Foundation](http://data.okfn.org/doc/tabular-data-package))
+
+Here's a minimal example of a tabular data package holding two files, that is, `data.csv` and `datapackage.json`:
+ 
+`data.csv`:
+
+~~~~
+Brewery,City,Name,Abv
+Andechser Klosterbrauerei,Andechs,Doppelbock Dunkel,7%
+Augustiner Bräu München,München,Edelstoff,5.6%
+Bayerische Staatsbrauerei Weihenstephan,Freising,Hefe Weissbier,5.4%
+Brauerei Spezial,Bamberg,Rauchbier Märzen,5.1%
+Hacker-Pschorr Bräu,München,Münchner Dunkel,5.0%
+Staatliches Hofbräuhaus München,München,Hofbräu Oktoberfestbier,6.3%
+...
+~~~~
+
+`datapackage.json`:
+
+~~~~
+{
+  "name": "beer",
+  "resources": [
+    {
+      "path": "data.csv",
+      "schema": {
+        "fields": [ { "name": "Brewery",   "type": "string" },
+                    { "name": "City",      "type": "string" },
+                    { "name": "Name",      "type": "string" },
+                    { "name": "Abv",       "type": "number" } ]
+      }
+    }
+  ]
+}
+~~~~
 
 ### Where to find data packages?
 
-See the [Data Packages Listing](http://data.okfn.org/data) at the Open Knowledge Foundation (OKFN) site
-for a start. Tabular data packages include:
+For some more real world examples see the [Data Packages Listing](http://data.okfn.org/data) at the Open Knowledge Foundation (OKFN) site for a start. Tabular data packages include:
 
 Name                     | Comments
 ------------------------ | -------------
@@ -55,8 +88,9 @@ Datapak.import(
 Using `Datapak.import` will:
 
 1) download all data packages to the `./pak` folder
+
 2) (auto-)add all tables to an in-memory SQLite database using SQL `create_table`
-   statements via `ActiveRecord` migrations e.g.
+   commands via `ActiveRecord` migrations e.g.
 
 ~~~
 create_table :constituents_financials do |t|
@@ -127,7 +161,8 @@ puts "Constituent.count: #{Constituent.count}"
 # SELECT COUNT(*) FROM "constituents"
 # => 496
 
-pp constituent.first
+
+pp Constituent.first
 
 # SELECT  "constituents".* FROM "constituents" ORDER BY "constituents"."id" ASC LIMIT 1
 # => #<Constituent:0x9f8cb78
@@ -135,6 +170,7 @@ pp constituent.first
          symbol: "MMM",
          name:   "3M Co",
          sector: "Industrials">
+
 
 pp Constituent.find_by!( symbol: 'MMM' )
 
@@ -148,6 +184,7 @@ pp Constituent.find_by!( symbol: 'MMM' )
          name:   "3M Co",
          sector: "Industrials">
 
+
 pp Constituent.find_by!( name: '3M Co' )
 
 # SELECT  "constituents".*
@@ -160,11 +197,13 @@ pp Constituent.find_by!( name: '3M Co' )
          name:   "3M Co",
          sector: "Industrials">
 
+
 pp Constituent.where( sector: 'Industrials' ).count
 
 # SELECT COUNT(*) FROM "constituents"
          WHERE "constituents"."sector" = "Industrials"
 # => 63
+
 
 pp Constituent.where( sector: 'Industrials' ).all
 
