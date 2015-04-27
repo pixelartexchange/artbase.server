@@ -61,7 +61,7 @@ Staatliches Hofbräuhaus München,München,Hofbräu Oktoberfestbier,6.3%
 
 ### Where to find data packages?
 
-For some more real world examples see the [Data Packages Listing](http://data.okfn.org/data) at the Open Knowledge Foundation (OKFN) site for a start. Tabular data packages include:
+For some real world examples see the [Data Packages Listing](http://data.okfn.org/data) at the Open Knowledge Foundation (OKFN) site for a start. Tabular data packages include:
 
 Name                     | Comments
 ------------------------ | -------------
