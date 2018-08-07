@@ -1,10 +1,10 @@
 # encoding: utf-8
 
-module Datapak
+module CsvPack
 
 class Downloader
 
-  def initialize( cache_dir='./pak' )
+  def initialize( cache_dir='./pack' )
     @cache_dir = cache_dir   # todo: check if folder exists now (or on demand)?
     @worker = Fetcher::Worker.new
   end
@@ -22,19 +22,23 @@ class Downloader
     ##   country-list
     ##
 
-    url_base = "http://data.okfn.org/data/core/#{name}"
+    ## url_base = "http://data.okfn.org/data/core/#{name}"
+    url_base = "https://datahub.io/core/#{name}"
     url = "#{url_base}/datapackage.json"
 
     dest_dir = "#{@cache_dir}/#{name}"
     FileUtils.mkdir_p( dest_dir )
 
-    pak_path = "#{dest_dir}/datapackage.json"
-    @worker.copy( url, pak_path )
+    pack_path = "#{dest_dir}/datapackage.json"
+    @worker.copy( url, pack_path )
 
-    h = JSON.parse( File.read( pak_path ) )
+    h = JSON.parse( File.read( pack_path ) )
+    pp h
 
     ## copy resources (tables)
     h['resources'].each do |r|
+      puts "== resource:"
+      pp r
 
       res_url       = r['url']
 
@@ -45,6 +49,7 @@ class Downloader
       end
 
       res_path = "#{dest_dir}/#{res_relative_path}"
+      puts "[debug] res_path: >#{res_path}<"
       res_dir   = File.dirname( res_path )
       FileUtils.mkdir_p( res_dir )
 
@@ -54,5 +59,4 @@ class Downloader
 
 end # class Downloader
 
-end # module Datapak
-
+end # module CsvPack

@@ -3,20 +3,20 @@
 
 ## note: for now use in-memory sqlite3 db
 
-module Datapak
+module CsvPack
 
-class Pak
+class Pack
   ## load (tabular) datapackage into memory
   def initialize( path )
-    
+
     ## convenience
     ## - check: if path is a folder/directory
     ##    (auto-)add  /datapackage.json
 
-    text = File.read( path )
+    text = File.open( path, 'r:utf-8' ).read
     @h = JSON.parse( text )
 
-    pak_dir = File.dirname(path)
+    pack_dir = File.dirname(path)
 
     ## pp @h
 
@@ -24,21 +24,21 @@ class Pak
     @tables = []
     @h['resources'].each do |r|
       ## build table data
-      @tables << build_tab( r, pak_dir )
+      @tables << build_tab( r, pack_dir )
     end
-    
+
     ## pp @tables
   end
 
   def name()    @h['name']; end
   def title()   @h['title']; end
   def license() @h['license']; end
-  
+
   def tables()  @tables; end
   ## convenience method - return first table
   def table()   @tables[0]; end
-  
-  def build_tab( h, pak_dir )
+
+  def build_tab( h, pack_dir )
     name          = h['name']
     relative_path = h['path']
 
@@ -50,12 +50,12 @@ class Pak
     puts "  reading resource (table) #{name} (#{relative_path})..."
     pp h
 
-    path = "#{pak_dir}/#{relative_path}"
-    text = File.read( path )
+    path = "#{pack_dir}/#{relative_path}"
+    text = File.open( path, 'r:utf-8' ).read
     tab = Tab.new( h, text )
     tab
   end
-end # class Pak
+end # class Pack
 
 
 class Tab
@@ -63,17 +63,17 @@ class Tab
 
   def initialize( h, text )
     @h = h
-    
+
     ## todo parse csv
     ##  note: use header options (first row MUST include headers)
     @data = CSV.parse( text, headers: true )
-    
+
     pp @data[0]
   end
-  
+
   def name()  @h['name']; end
   def_delegators :@data, :[], :each
- 
+
   def pretty_print( printer )
     printer.text "Tab<#{object_id} @data.name=#{name}, @data.size=#{@data.size}>"
   end
@@ -90,8 +90,8 @@ class Tab
         column_type = DATA_TYPES[f['type']]
 
         puts "  #{column_type} :#{column_name}  =>  #{f['type']} - #{f['name']}"
-                                 
-        t.send( column_type.to_sym, column_name.to_sym )   ## todo/check: to_sym needed? 
+
+        t.send( column_type.to_sym, column_name.to_sym )   ## todo/check: to_sym needed?
       end
       t.string  :name
     end
@@ -122,7 +122,7 @@ class Tab
       values = []
       row.fields.each_with_index do |value,index|   # get array of values
         type = column_types[index]
-        ## todo add boolean ??  
+        ## todo add boolean ??
         if value.blank?
           values << 'NULL'
         elsif [:number,:float,:integer].include?( type )
@@ -140,11 +140,11 @@ class Tab
     end
   end # method import!
 
-  
+
   def import_v1!
      ### note: import via sql for (do NOT use ActiveRecord record class for now)
     con = ActiveRecord::Base.connection
-    
+
     column_names = []
     column_types = []
     column_placeholders = []
@@ -206,7 +206,7 @@ class Tab
     ##
     ## if identifier starts w/ number add leading underscore (_)
     ##  e.g. 52 Week Price  => becomes  _52_week_price
-    
+
     ident = ident.strip.downcase
     ident = ident.gsub( /[\.\-\/]/, '_' )  ## convert some special chars to underscore (e.g. dash -)
     ident = ident.gsub( ' ', '_' )
@@ -243,4 +243,4 @@ private
 
 end # class Tab
 
-end # module Datapak
+end # module CsvPack

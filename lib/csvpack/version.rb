@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Datapak
+module CsvPack
 
   MAJOR = 0 ## todo: namespace inside version or something - why? why not??
   MINOR = 1
@@ -12,12 +12,11 @@ module Datapak
   end
 
   def self.banner
-    "datapak/#{VERSION} on Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]"
+    "csvpack/#{VERSION} on Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]"
   end
 
   def self.root
-    "#{File.expand_path( File.dirname(File.dirname(File.dirname(__FILE__))) )}"
+    File.expand_path( File.dirname(File.dirname(File.dirname(__FILE__))) )
   end
 
-end   # module Datapak
-
+end  # module CsvPack

@@ -10,9 +10,9 @@ require 'helper'
 class TestImport < MiniTest::Test
 
   def test_import
-    
-    Datapak.import(
-      'cpi',                    ## Annual Consumer Price Index (CPI) 
+
+    CsvPack.import(
+      'cpi',                    ## Annual Consumer Price Index (CPI)
       'gdp',                    ## Country, Regional and World GDP (Gross Domestic Product)
     )
 

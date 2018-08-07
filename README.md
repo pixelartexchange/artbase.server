@@ -66,7 +66,8 @@ Staatliches Hofbräuhaus München,München,Hofbräu Oktoberfestbier,6.3%
 
 ### Where to find data packages?
 
-For some real world examples see the [Data Packages Listing](https://datahub.io/core) ([Sources](https://github.com/datasets)) at the Data Hub.io • Frictionless Data Initiative site for a start. Tabular data packages include:
+For some real world examples see the [Data Packages Listing](https://datahub.io/core) ([Sources](https://github.com/datasets)) at the Data Hub.io • Frictionless Data Initiative
+website for a start. Tabular data packages include:
 
 Name                     | Comments
 ------------------------ | -------------

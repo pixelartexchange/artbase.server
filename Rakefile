@@ -1,14 +1,14 @@
 require 'hoe'
-require './lib/datapak/version.rb'
+require './lib/csvpack/version.rb'
 
-Hoe.spec 'datapak' do
+Hoe.spec 'csvpack' do
 
-  self.version = Datapak::VERSION
+  self.version = CsvPack::VERSION
 
-  self.summary = 'datapak - yet another library to work with tabular data packages (*.csv files w/ datapackage.json)'
+  self.summary = 'csvpack - work with tabular data packages using comma-separated values (CSV) datafiles in text with datapackage.json; download, read into and query comma-separated values (CSV) datafiles with your SQL database (e.g. SQLite, PostgreSQL, ...) of choice and much more'
   self.description = summary
 
-  self.urls    = ['https://github.com/textkit/datapak']
+  self.urls    = ['https://github.com/csv11/csvpack']
 
   self.author  = 'Gerald Bauer'
   self.email   = 'ruby-talk@ruby-lang.org'
@@ -18,15 +18,15 @@ Hoe.spec 'datapak' do
   self.history_file = 'HISTORY.md'
 
   self.extra_deps = [
-    ['logutils', '>=0.6.1'],
-    ['fetcher', '>=0.4.5'],
-    ['activerecord'],
+    ['logutils',     '>=0.6.1'],
+    ['fetcher',      '>=0.4.5'],
+    ['activerecord', '>=5.0.0'],
   ]
 
   self.licenses = ['Public Domain']
 
   self.spec_extras = {
-    required_ruby_version: '>= 1.9.2'
+    required_ruby_version: '>= 2.2.2'
   }
 
 end

@@ -9,6 +9,7 @@ doc/
 
 pak/
 .pak/
+pack/
+.pack/
 datapackage/
 .datapackage/
-
