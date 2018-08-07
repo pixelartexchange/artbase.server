@@ -1,12 +1,14 @@
-# datapak
+# csvpack
 
-yet another library to work with tabular data packages (*.csv files w/ datapackage.json)
+work with tabular data packages using comma-separated values (CSV) datafiles in text with datapackage.json; download, read into and query comma-separated values (CSV) datafiles with your SQL database (e.g. SQLite, PostgreSQL, ...) of choice and much more
 
-* home  :: [github.com/csv11/datapak](https://github.com/csv11/datapak)
-* bugs  :: [github.com/csv11/datapak/issues](https://github.com/csv11/datapak/issues)
-* gem   :: [rubygems.org/gems/datapak](https://rubygems.org/gems/datapak)
-* rdoc  :: [rubydoc.info/gems/datapak](http://rubydoc.info/gems/datapak)
+
+* home  :: [github.com/csv11/csvpack](https://github.com/csv11/csvpack)
+* bugs  :: [github.com/csv11/csvpack/issues](https://github.com/csv11/csvpack/issues)
+* gem   :: [rubygems.org/gems/csvpack](https://rubygems.org/gems/csvpack)
+* rdoc  :: [rubydoc.info/gems/csvpack](http://rubydoc.info/gems/csvpack)
 * forum :: [ruby-talk@ruby-lang.org](http://www.ruby-lang.org/en/community/mailing-lists/)
+
 
 
 ## Usage
@@ -22,14 +24,15 @@ yet another library to work with tabular data packages (*.csv files w/ datapacka
 >   and the specific data files (e.g. schema) is stored in a single JSON file
 >   named `datapackage.json` which follows the Data Package format
 
-(Source: [Tabular Data Packages, Open Knowledge Foundation](http://data.okfn.org/doc/tabular-data-package))
+(Source: [Tabular Data Packages, Frictionless Data Initiative • Data Hub.io • Open Knowledge Foundation • Data Protocols.org](https://datahub.io/docs/data-packages/tabular))
+
 
 
 Here's a minimal example of a tabular data package holding two files, that is, `data.csv` and `datapackage.json`:
- 
+
 `data.csv`:
 
-~~~~
+```
 Brewery,City,Name,Abv
 Andechser Klosterbrauerei,Andechs,Doppelbock Dunkel,7%
 Augustiner Bräu München,München,Edelstoff,5.6%
@@ -38,30 +41,32 @@ Brauerei Spezial,Bamberg,Rauchbier Märzen,5.1%
 Hacker-Pschorr Bräu,München,Münchner Dunkel,5.0%
 Staatliches Hofbräuhaus München,München,Hofbräu Oktoberfestbier,6.3%
 ...
-~~~~
+```
 
 `datapackage.json`:
 
-~~~~
+``` json
 {
   "name": "beer",
   "resources": [
     {
       "path": "data.csv",
       "schema": {
-        "fields": [ { "name": "Brewery",   "type": "string" },
-                    { "name": "City",      "type": "string" },
-                    { "name": "Name",      "type": "string" },
-                    { "name": "Abv",       "type": "number" } ]
+        "fields": [{ "name": "Brewery",   "type": "string" },
+                   { "name": "City",      "type": "string" },
+                   { "name": "Name",      "type": "string" },
+                   { "name": "Abv",       "type": "number" }]
       }
     }
   ]
 }
-~~~~
+```
+
+
 
 ### Where to find data packages?
 
-For some real world examples see the [Data Packages Listing](http://data.okfn.org/data) at the Open Knowledge Foundation (OKFN) site for a start. Tabular data packages include:
+For some real world examples see the [Data Packages Listing](https://datahub.io/core) ([Sources](https://github.com/datasets)) at the Data Hub.io • Frictionless Data Initiative site for a start. Tabular data packages include:
 
 Name                     | Comments
 ------------------------ | -------------
@@ -71,29 +76,35 @@ Name                     | Comments
 `gdb`                    | Country, Regional and World GDP (Gross Domestic Product)
 `s-and-p-500-companies`  | S&P 500 Companies with Financial Information
 `un-locode`              | UN-LOCODE Codelist
+`gold-prices`            | Gold Prices (Monthly in USD)
+`bond-yields-uk-10y`     | 10 Year UK Government Bond Yields (Long-Term Interest Rate)
+
+
 
 and many more
 
 
-### Code, Code, Code - Ruby Scripts
+### Code, Code, Code - Script Your Data Workflow in Ruby
 
-~~~
-require 'datapak`
 
-Datapak.import(
+``` ruby
+require 'csvpack'
+
+CsvPack.import(
   's-and-p-500-companies',
   'gdb'
 )
-~~~
+```
 
-Using `Datapak.import` will:
+Using `CsvPack.import` will:
 
-1) download all data packages to the `./pak` folder
+1) download all data packages to the `./pack` folder
 
 2) (auto-)add all tables to an in-memory SQLite database using SQL `create_table`
    commands via `ActiveRecord` migrations e.g.
 
-~~~
+
+``` ruby
 create_table :constituents_financials do |t|
   t.string :symbol          # Symbol         (string)
   t.string :name            # Name           (string)
@@ -111,11 +122,11 @@ create_table :constituents_financials do |t|
   t.float  :price_book      # Price/Book     (number)
   t.string :sec_filings     # SEC Filings    (string)
 end
-~~~
+```
 
 3) (auto-)import all datasets using SQL inserts e.g.
 
-~~~
+``` sql
 INSERT INTO constituents_financials
   (symbol,
    name,
@@ -148,7 +159,7 @@ VALUES
    3.28,
    6.43,
    'http://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=MMM')
-~~~
+```
 
 4) (auto-)add ActiveRecord models for all tables.
 
@@ -156,7 +167,7 @@ VALUES
 So what? Now you can use all the "magic" of ActiveRecord to query
 the datasets. Example:
 
-~~~
+``` ruby
 puts "Constituent.count: #{Constituent.count}"
 
 # SELECT COUNT(*) FROM "constituents"
@@ -167,81 +178,82 @@ pp Constituent.first
 
 # SELECT  "constituents".* FROM "constituents" ORDER BY "constituents"."id" ASC LIMIT 1
 # => #<Constituent:0x9f8cb78
-         id:     1,
-         symbol: "MMM",
-         name:   "3M Co",
-         sector: "Industrials">
+#         id:     1,
+#         symbol: "MMM",
+#         name:   "3M Co",
+#         sector: "Industrials">
 
 
 pp Constituent.find_by!( symbol: 'MMM' )
 
 # SELECT  "constituents".*
-         FROM "constituents"
-         WHERE "constituents"."symbol" = "MMM"
-         LIMIT 1
+#         FROM "constituents"
+#         WHERE "constituents"."symbol" = "MMM"
+#         LIMIT 1
 # => #<Constituent:0x9f8cb78
-         id:     1,
-         symbol: "MMM",
-         name:   "3M Co",
-         sector: "Industrials">
+#         id:     1,
+#         symbol: "MMM",
+#         name:   "3M Co",
+#         sector: "Industrials">
 
 
 pp Constituent.find_by!( name: '3M Co' )
 
 # SELECT  "constituents".*
-          FROM "constituents"
-          WHERE "constituents"."name" = "3M Co"
-          LIMIT 1
+#          FROM "constituents"
+#          WHERE "constituents"."name" = "3M Co"
+#          LIMIT 1
 # => #<Constituent:0x9f8cb78
-         id:     1,
-         symbol: "MMM",
-         name:   "3M Co",
-         sector: "Industrials">
+#         id:     1,
+#         symbol: "MMM",
+#         name:   "3M Co",
+#         sector: "Industrials">
 
 
 pp Constituent.where( sector: 'Industrials' ).count
 
 # SELECT COUNT(*) FROM "constituents"
-         WHERE "constituents"."sector" = "Industrials"
+#         WHERE "constituents"."sector" = "Industrials"
 # => 63
 
 
 pp Constituent.where( sector: 'Industrials' ).all
 
 # SELECT "constituents".*
-         FROM "constituents"
-         WHERE "constituents"."sector" = "Industrials"
+#         FROM "constituents"
+#         WHERE "constituents"."sector" = "Industrials"
 # => [#<Constituent:0x9f8cb78
-          id:     1,
-          symbol: "MMM",
-          name:   "3M Co",
-          sector: "Industrials">,
-      #<Constituent:0xa2a4180
-          id:     8,
-          symbol: "ADT",
-          name:   "ADT Corp (The)",
-          sector: "Industrials">,...]
+#          id:     1,
+#          symbol: "MMM",
+#          name:   "3M Co",
+#          sector: "Industrials">,
+#      #<Constituent:0xa2a4180
+#          id:     8,
+#          symbol: "ADT",
+#          name:   "ADT Corp (The)",
+#          sector: "Industrials">,...]
+```
 
 and so on
-~~~
+
 
 
 #### How to dowload a data package ("by hand")?
 
-Use the `Datapak::Downloader` class to download a data package
-to your disk (by default data packages get stored in `./pak`).
+Use the `CsvPack::Downloader` class to download a data package
+to your disk (by default data packages get stored in `./pack`).
 
-~~~
-dl = Datapak::Downloader.new
+``` ruby
+dl = CsvPack::Downloader.new
 dl.fetch( 'language-codes' )
 dl.fetch( 's-and-p-500-companies' )
-dl.fetch( 'un-locode`)
-~~~
+dl.fetch( 'un-locode')
+```
 
 Will result in:
 
-~~~
--- pak
+```
+-- pack
    |-- language-codes
    |   |-- data
    |   |   |-- language-codes-3b2.csv
@@ -261,20 +273,21 @@ Will result in:
        |   |-- status-indicators.csv
        |   `-- subdivision-codes.csv
        `-- datapackage.json
-~~~
+```
+
 
 #### How to add and import a data package ("by hand")?
 
-Use the `Datapak::Pak` class to read-in a data package
-and add and import into an SQL database. 
+Use the `CsvPack::Pack` class to read-in a data package
+and add and import into an SQL database.
 
-~~~
-pak = Datapak::Pak.new( './pak/un-locode/datapackage.json' )
-pak.tables.each do |table|
+``` ruby
+pack = CsvPack::Pack.new( './pack/un-locode/datapackage.json' )
+pack.tables.each do |table|
   table.up!      # (auto-) add table  using SQL create_table via ActiveRecord migration
   table.import!  # import all records using SQL inserts
 end
-~~~
+```
 
 
 #### How to connect to a different SQL database?
@@ -285,48 +298,51 @@ is using an in-memory SQLite3 database.
 
 ##### SQLite
 
-For example, to create an SQLite3 database on disk - lets say `datapak.db` -
-use in your script (before the `Datapak.import` statement):
+For example, to create an SQLite3 database on disk - lets say `mine.db` -
+use in your script (before the `CsvPack.import` statement):
 
-~~~
-ActiveRecord::Base.establish_connection( adapter:  'sqlite3
-                                         database: './datapak.db' )
-~~~
+``` ruby
+ActiveRecord::Base.establish_connection( adapter:  'sqlite3',
+                                         database: './mine.db' )
+```
 
-##### PostgreSQL 
+##### PostgreSQL
 
 For example, to connect to a PostgreSQL database use in your script
-(before the `Datapak.import` statement):
+(before the `CsvPack.import` statement):
 
-~~~
+``` ruby
 require 'pg'       ##  pull-in PostgreSQL (pg) machinery
 
 ActiveRecord::Base.establish_connection( adapter:  'postgresql'
-                                         username: 'ruby'",
+                                         username: 'ruby',
                                          password: 'topsecret',
                                          database: 'database' )
-~~~
+```
 
 
 ## Install
 
 Just install the gem:
 
-    $ gem install datapak
+```
+$ gem install csvpack
+```
+
 
 
 ## Alternatives
 
-See the "[Tools and Plugins for working with Data Packages](http://data.okfn.org/tools)"
-page at the Open Knowledge Foundation (OKFN).
+See the "[Tools and Plugins for working with Data Packages](https://frictionlessdata.io/software)"
+page at the Frictionless Data Initiative.
 
 
 ## License
 
-The `datapak` scripts are dedicated to the public domain.
+
+The `csvpack` scripts are dedicated to the public domain.
 Use it as you please with no restrictions whatsoever.
 
 ## Questions? Comments?
 
 Send them along to the ruby-talk mailing list. Thanks!
-
