@@ -84,7 +84,7 @@ Name                     | Comments
 and many more
 
 
-### Code, Code, Code - Script Your Data Workflow in Ruby
+### Code, Code, Code - Script Your Data Workflow with Ruby
 
 
 ``` ruby
@@ -168,7 +168,7 @@ So what? Now you can use all the "magic" of ActiveRecord to query
 the datasets. Example:
 
 ``` ruby
-puts "Constituent.count: #{Constituent.count}"
+pp Constituent.count
 
 # SELECT COUNT(*) FROM "constituents"
 # => 496
@@ -238,7 +238,10 @@ and so on
 
 
 
-#### How to dowload a data package ("by hand")?
+### Frequently Asked Questions (F.A.Qs) and Answers
+
+
+#### Q: How to dowload a data package ("by hand")?
 
 Use the `CsvPack::Downloader` class to download a data package
 to your disk (by default data packages get stored in `./pack`).
@@ -276,7 +279,7 @@ Will result in:
 ```
 
 
-#### How to add and import a data package ("by hand")?
+#### Q: How to add and import a data package ("by hand")?
 
 Use the `CsvPack::Pack` class to read-in a data package
 and add and import into an SQL database.
@@ -290,7 +293,7 @@ end
 ```
 
 
-#### How to connect to a different SQL database?
+#### Q: How to connect to a different SQL database?
 
 You can connect to any database supported by ActiveRecord. If you do NOT
 establish a connection in your script - the standard (default fallback)
@@ -319,6 +322,8 @@ ActiveRecord::Base.establish_connection( adapter:  'postgresql'
                                          password: 'topsecret',
                                          database: 'database' )
 ```
+
+
 
 
 ## Install
