@@ -146,7 +146,7 @@ INSERT INTO constituents_financials
    sec_filings)
 VALUES
   ('MMM',
-   '3M Co',
+   '3M Company',
    'Industrials',
    162.27,
    2.11,
@@ -181,7 +181,7 @@ pp Constituent.first
 # => #<Constituent:0x9f8cb78
 #         id:     1,
 #         symbol: "MMM",
-#         name:   "3M Co",
+#         name:   "3M Company",
 #         sector: "Industrials">
 
 
@@ -194,20 +194,20 @@ pp Constituent.find_by!( symbol: 'MMM' )
 # => #<Constituent:0x9f8cb78
 #         id:     1,
 #         symbol: "MMM",
-#         name:   "3M Co",
+#         name:   "3M Company",
 #         sector: "Industrials">
 
 
-pp Constituent.find_by!( name: '3M Co' )
+pp Constituent.find_by!( name: '3M Company' )
 
 # SELECT  "constituents".*
 #          FROM "constituents"
-#          WHERE "constituents"."name" = "3M Co"
+#          WHERE "constituents"."name" = "3M Company"
 #          LIMIT 1
 # => #<Constituent:0x9f8cb78
 #         id:     1,
 #         symbol: "MMM",
-#         name:   "3M Co",
+#         name:   "3M Company",
 #         sector: "Industrials">
 
 
@@ -226,7 +226,7 @@ pp Constituent.where( sector: 'Industrials' ).all
 # => [#<Constituent:0x9f8cb78
 #          id:     1,
 #          symbol: "MMM",
-#          name:   "3M Co",
+#          name:   "3M Company",
 #          sector: "Industrials">,
 #      #<Constituent:0xa2a4180
 #          id:     8,
@@ -260,14 +260,14 @@ Will result in:
 -- pack
    |-- language-codes
    |   |-- data
+   |   |   |-- ietf-language-tags.csv
    |   |   |-- language-codes-3b2.csv
-   |   |   |-- language-codes.csv
-   |   |   `-- language-codes-full.csv
+   |   |   |-- language-codes-full.csv
+   |   |   `-- language-codes.csv
    |   `-- datapackage.json
    |-- s-and-p-500-companies
    |   |-- data
-   |   |   |-- constituents.csv
-   |   |   `-- constituents-financials.csv
+   |   |   `-- constituents.csv
    |   `-- datapackage.json
    `-- un-locode
        |-- data

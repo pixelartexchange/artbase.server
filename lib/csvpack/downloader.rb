@@ -23,37 +23,47 @@ class Downloader
     ##
 
     ## url_base = "http://data.okfn.org/data/core/#{name}"
-    url_base = "https://datahub.io/core/#{name}"
+    ## url_base = "https://datahub.io/core/#{name}"
+
+    ## or use "https://github.com/datasets/#{name}/raw/master"
+    url_base = "https://raw.githubusercontent.com/datasets/#{name}/master"
+
+
     url = "#{url_base}/datapackage.json"
 
     dest_dir = "#{@cache_dir}/#{name}"
     FileUtils.mkdir_p( dest_dir )
 
-    pack_path = "#{dest_dir}/datapackage.json"
+    pack_path = "#{dest_dir}/datapackage.json"   ## todo/fix: rename to meta_path - why? why not?
     @worker.copy( url, pack_path )
 
-    h = JSON.parse( File.read( pack_path ) )
+    h = Meta.load_file( pack_path )
     pp h
 
     ## copy resources (tables)
-    h['resources'].each do |r|
+    h.resources.each do |r|
       puts "== resource:"
       pp r
 
-      res_url       = r['url']
-
       res_name          = r['name']
-      res_relative_path = r['path']
+      res_relative_path = r['path']   ## fix/todo: might no contain the url - is now res_url_or_relative_path !!!!!
       if res_relative_path.nil?
         res_relative_path = "#{res_name}.csv"
       end
 
-      res_path = "#{dest_dir}/#{res_relative_path}"
-      puts "[debug] res_path: >#{res_path}<"
-      res_dir   = File.dirname( res_path )
-      FileUtils.mkdir_p( res_dir )
+      res_url       = r['url']   ## check - old package format - url NO longer used!!!!
+      if res_url.nil?
+         ## build url
+         res_url = "#{url_base}/#{res_relative_path}"
+      end
 
-      @worker.copy( res_url, res_path )
+      ## todo/fix: rename - use just res_path - why? why not?
+      local_res_path = "#{dest_dir}/#{res_relative_path}"
+      puts "[debug] local_res_path: >#{local_res_path}<"
+      local_res_dir   = File.dirname( local_res_path )
+      FileUtils.mkdir_p( local_res_dir )
+
+      @worker.copy( res_url, local_res_path )
     end
   end
 

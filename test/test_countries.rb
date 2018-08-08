@@ -10,31 +10,32 @@ require 'helper'
 class TestCountries < MiniTest::Test
 
   def test_country_list
-    pak = Datapak::Pak.new( './pak/country-list/datapackage.json' )
+    pack = CsvPack::Pack.new( './pack/country-list/datapackage.json' )
 
-    puts "name: #{pak.name}"
-    puts "title: #{pak.title}"
-    puts "license: #{pak.license}"
+    meta = pack.meta
+    puts "name: #{meta.name}"
+    puts "title: #{meta.title}"
+    puts "license: #{meta.license}"
 
-    pp pak.tables
+    pp pack.tables
 
     ## pak.table.each do |row|
     ##  pp row
     ## end
 
-    puts pak.table.dump_schema
+    puts pack.table.dump_schema
 
     # database setup 'n' config
-    ActiveRecord::Base.establish_connection( adapter:  'sqlite3', database: ':memory:' )
+    ActiveRecord::Base.establish_connection( adapter:  'sqlite3',
+                                             database: ':memory:' )
     ActiveRecord::Base.logger = Logger.new( STDOUT )
 
-    pak.table.up!
-    pak.table.import!
+    pack.table.up!
+    pack.table.import!
 
-    pp pak.table.ar_clazz
+    pp pack.table.ar_clazz
 
     assert true  # if we get here - test success
   end
 
 end # class TestCountries
-

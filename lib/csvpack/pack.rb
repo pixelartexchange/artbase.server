@@ -5,6 +5,47 @@
 
 module CsvPack
 
+
+
+class Meta   ## Pack(age) Meta / Manifest / Descriptor
+  extend Forwardable
+
+  def self.load_file( path )
+    text = File.open( path, 'r:utf-8' ).read
+    load( text )
+  end
+  ## todo: add alias method read
+
+  def self.load( text )
+    hash = JSON.parse( text )
+    new( hash )
+  end
+  ## todo: add alias method parse
+
+
+  def initialize( h )
+    @h = h
+  end
+
+  def name()      @h['name']; end
+  def title()     @h['title']; end
+  def license()   @h['license']; end
+
+  ## todo/fix: wrap resource in a class - why? why not?
+  def resources() @h['resources']; end
+
+  ##############
+  def_delegators :@h, :[]    ## todo/fix: add some more hash delgates - why? why not?
+
+  def pretty_print( printer )
+    printer.text "Meta<#{object_id} @h.name=#{name}, ...>"
+  end
+end  # class Meta
+
+
+
+
+
 class Pack
   ## load (tabular) datapackage into memory
   def initialize( path )
@@ -13,16 +54,15 @@ class Pack
     ## - check: if path is a folder/directory
     ##    (auto-)add  /datapackage.json
 
-    text = File.open( path, 'r:utf-8' ).read
-    @h = JSON.parse( text )
+    @meta = Meta.load_file( path )
 
     pack_dir = File.dirname(path)
 
-    ## pp @h
+    pp @meta
 
     ## read in tables
     @tables = []
-    @h['resources'].each do |r|
+    @meta.resources.each do |r|
       ## build table data
       @tables << build_tab( r, pack_dir )
     end
@@ -30,9 +70,8 @@ class Pack
     ## pp @tables
   end
 
-  def name()    @h['name']; end
-  def title()   @h['title']; end
-  def license() @h['license']; end
+  def meta() @meta; end  ## delegate known meta props (e.g. name, title, etc. - why? why not?)
+
 
   def tables()  @tables; end
   ## convenience method - return first table
@@ -189,6 +228,7 @@ class Tab
     'datetime' => :datetime,
     'date'     => :date,
     'time'     => :time,
+    'year'     => :string,     ## note: map year for now to string - anything better? why? why not?
   }
 
   def dump_schema
