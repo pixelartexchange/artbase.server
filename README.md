@@ -24,13 +24,13 @@ tools 'n' scripts for working with tabular data packages using comma-separated v
 >   and the specific data files (e.g. schema) is stored in a single JSON file
 >   named `datapackage.json` which follows the Data Package format
 
-(Source: [Tabular Data Packages, Frictionless Data Project • Data Hub.io • Open Knowledge Foundation • Data Protocols.org](https://datahub.io/docs/data-packages/tabular))
+(Source: [Tabular Data Packages @ Frictionless Data Project • Data Hub.io • Open Knowledge Foundation • Data Protocols.org](https://datahub.io/docs/data-packages/tabular))
 
 
 
 Here's a minimal example of a tabular data package holding two files, that is, `data.csv` and `datapackage.json`:
 
-[`data.csv`](test/pack/beer/data.csv):
+[`beer/data.csv`](test/pack/beer/data.csv):
 
 ```
 Brewery,City,Name,Abv
@@ -43,7 +43,7 @@ Staatliches Hofbräuhaus München,München,Hofbräu Oktoberfestbier,6.3%
 ...
 ```
 
-[`datapackage.json`](test/pack/beer/datapackage.json):
+[`beer/datapackage.json`](test/pack/beer/datapackage.json):
 
 ``` json
 {
