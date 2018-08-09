@@ -5,13 +5,13 @@ Hoe.spec 'csvpack' do
 
   self.version = CsvPack::VERSION
 
-  self.summary = 'csvpack - work with tabular data packages using comma-separated values (CSV) datafiles in text with datapackage.json; download, read into and query comma-separated values (CSV) datafiles with your SQL database (e.g. SQLite, PostgreSQL, ...) of choice and much more'
+  self.summary = "csvpack - tools 'n' scripts for working with tabular data packages using comma-separated values (CSV) datafiles in text with meta info (that is, schema, datatypes, ..) in datapackage.json; download, read into and query CSV datafiles with your SQL database (e.g. SQLite, PostgreSQL, ...) of choice and much more"
   self.description = summary
 
   self.urls    = ['https://github.com/csv11/csvpack']
 
   self.author  = 'Gerald Bauer'
-  self.email   = 'ruby-talk@ruby-lang.org'
+  self.email   = 'wwwmake@googlegroups.com'
 
   # switch extension to .markdown for gihub formatting
   self.readme_file  = 'README.md'

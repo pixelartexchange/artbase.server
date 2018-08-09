@@ -1,13 +1,13 @@
 # csvpack
 
-work with tabular data packages using comma-separated values (CSV) datafiles in text with datapackage.json; download, read into and query comma-separated values (CSV) datafiles with your SQL database (e.g. SQLite, PostgreSQL, ...) of choice and much more
+tools 'n' scripts for working with tabular data packages using comma-separated values (CSV) datafiles in text with meta info (that is, schema, datatypes, ..) in datapackage.json; download, read into and query CSV datafiles with your SQL database (e.g. SQLite, PostgreSQL, ...) of choice and much more
 
 
 * home  :: [github.com/csv11/csvpack](https://github.com/csv11/csvpack)
 * bugs  :: [github.com/csv11/csvpack/issues](https://github.com/csv11/csvpack/issues)
 * gem   :: [rubygems.org/gems/csvpack](https://rubygems.org/gems/csvpack)
 * rdoc  :: [rubydoc.info/gems/csvpack](http://rubydoc.info/gems/csvpack)
-* forum :: [ruby-talk@ruby-lang.org](http://www.ruby-lang.org/en/community/mailing-lists/)
+* forum :: [wwwmake](http://groups.google.com/group/wwwmake)
 
 
 
@@ -24,13 +24,13 @@ work with tabular data packages using comma-separated values (CSV) datafiles in 
 >   and the specific data files (e.g. schema) is stored in a single JSON file
 >   named `datapackage.json` which follows the Data Package format
 
-(Source: [Tabular Data Packages, Frictionless Data Initiative • Data Hub.io • Open Knowledge Foundation • Data Protocols.org](https://datahub.io/docs/data-packages/tabular))
+(Source: [Tabular Data Packages, Frictionless Data Project • Data Hub.io • Open Knowledge Foundation • Data Protocols.org](https://datahub.io/docs/data-packages/tabular))
 
 
 
 Here's a minimal example of a tabular data package holding two files, that is, `data.csv` and `datapackage.json`:
 
-`data.csv`:
+[`data.csv`](test/pack/beer/data.csv):
 
 ```
 Brewery,City,Name,Abv
@@ -43,7 +43,7 @@ Staatliches Hofbräuhaus München,München,Hofbräu Oktoberfestbier,6.3%
 ...
 ```
 
-`datapackage.json`:
+[`datapackage.json`](test/pack/beer/datapackage.json):
 
 ``` json
 {
@@ -66,8 +66,10 @@ Staatliches Hofbräuhaus München,München,Hofbräu Oktoberfestbier,6.3%
 
 ### Where to find data packages?
 
-For some real world examples see the [Data Packages Listing](https://datahub.io/core) ([Sources](https://github.com/datasets)) at the Data Hub.io • Frictionless Data Initiative
+For some 100+ real world examples see the [Data Packages Listing](https://datahub.io/core) ([Sources](https://github.com/datasets), [Registry](https://github.com/datasets/registry/blob/master/core-list.csv))
+at the Data Hub.io • Frictionless Data Project
 website for a start. Tabular data packages include:
+
 
 Name                     | Comments
 ------------------------ | -------------
@@ -77,8 +79,12 @@ Name                     | Comments
 `gdb`                    | Country, Regional and World GDP (Gross Domestic Product)
 `s-and-p-500-companies`  | S&P 500 Companies with Financial Information
 `un-locode`              | UN-LOCODE Codelist
-`gold-prices`            | Gold Prices (Monthly in USD)
 `bond-yields-uk-10y`     | 10 Year UK Government Bond Yields (Long-Term Interest Rate)
+`gold-prices`            | Gold Prices (Monthly in USD)
+`oil-prices`             | Brent crude and WTI oil prices from US EIA
+`co2-emissions`          | Annual info about co2 emissions per nation
+`co2-fossil-global`      | Global CO2 Emissions from fossil-fuels annually since 1751 till 2014
+
 
 
 
@@ -106,60 +112,25 @@ Using `CsvPack.import` will:
 
 
 ``` ruby
-create_table :constituents_financials do |t|
+create_table :constituents do |t|
   t.string :symbol          # Symbol         (string)
   t.string :name            # Name           (string)
   t.string :sector          # Sector         (string)
-  t.float  :price           # Price          (number)
-  t.float  :dividend_yield  # Dividend Yield (number)
-  t.float  :price_earnings  # Price/Earnings (number)
-  t.float  :earnings_share  # Earnings/Share (number)
-  t.float  :book_value      # Book Value     (number)
-  t.float  :_52_week_low    # 52 week low    (number)
-  t.float  :_52_week_high   # 52 week high   (number)
-  t.float  :market_cap      # Market Cap     (number)
-  t.float  :ebitda          # EBITDA         (number)
-  t.float  :price_sales     # Price/Sales    (number)
-  t.float  :price_book      # Price/Book     (number)
-  t.string :sec_filings     # SEC Filings    (string)
 end
 ```
+
 
 3) (auto-)import all datasets using SQL inserts e.g.
 
 ``` sql
-INSERT INTO constituents_financials
+INSERT INTO constituents
   (symbol,
    name,
-   sector,
-   price,
-   dividend_yield,
-   price_earnings,
-   earnings_share,
-   book_value,
-   _52_week_low,
-   _52_week_high,
-   market_cap,
-   ebitda,
-   price_sales,
-   price_book,
-   sec_filings)
-VALUES
+   sector)
+VALUES  
   ('MMM',
    '3M Company',
-   'Industrials',
-   162.27,
-   2.11,
-   22.28,
-   7.284,
-   25.238,
-   123.61,
-   162.92,
-   104.0,
-   8.467,
-   3.28,
-   6.43,
-   'http://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=MMM')
+   'Industrials')
 ```
 
 4) (auto-)add ActiveRecord models for all tables.
@@ -339,8 +310,8 @@ $ gem install csvpack
 
 ## Alternatives
 
-See the "[Tools and Plugins for working with Data Packages](https://frictionlessdata.io/software)"
-page at the Frictionless Data Initiative.
+See the [Tools and Plugins for working with Data Packages](https://frictionlessdata.io/software)
+page at the Frictionless Data Project.
 
 
 ## License
@@ -349,6 +320,9 @@ page at the Frictionless Data Initiative.
 The `csvpack` scripts are dedicated to the public domain.
 Use it as you please with no restrictions whatsoever.
 
+
+
 ## Questions? Comments?
 
-Send them along to the ruby-talk mailing list. Thanks!
+Send them along to the [wwwmake forum](http://groups.google.com/group/wwwmake).
+Thanks!
