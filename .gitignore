@@ -5,11 +5,11 @@ doc/
 
 
 ################
-# ignore datapackage folders
+# ignore (top-level) datapackage folders
 
-pak/
-.pak/
-pack/
-.pack/
-datapackage/
-.datapackage/
+/pak/
+/.pak/
+/pack/
+/.pack/
+/datapackage/
+/.datapackage/
