@@ -1,6 +1,6 @@
 ###
 #  ruby script (data work flow) getting started sample from the csvpack readme
-#    see https://github.com/csv11/csvpack
+#    see https://github.com/csvreader/csvpack
 #
 
 require 'csvpack'
