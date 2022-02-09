@@ -3,16 +3,18 @@ package main
 import (
 	"fmt"
 	"image"
-	// "image/color"
+	"image/color"
 	"image/png"
 	"image/draw"
 	"os"
 	"log"
 	"errors"
+	"strings"
 	"strconv"
 	"bytes"
 	"net/http"
-	"io/ioutil"
+	"io"
+	// "io/ioutil"
 	"html/template"
 	"github.com/gin-gonic/gin"
 )
@@ -20,23 +22,52 @@ import (
 
 
 type collection struct {
-	Name   string
-	Width  int
-	Height int
-	Path   string
-	Url    string
+	Name         string
+	Width        int
+	Height       int
+	Path         string
+	Url          string
+	// note:  background==false (default) => transparent
+	//        background==true            => images have backgrounds (NOT transparent)
+	Background   bool
+	Count        int
 }
+
 
 var collections = []collection{
   {Name: "punks",     Width: 24, Height: 24,
 	 Path: "./punks.png",
 	 Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/punks.png" },
-  {Name: "morepunks",  Width: 24, Height: 24,
+
+	 {Name: "morepunks",  Width: 24, Height: 24,
 	 Path: "./morepunks.png",
 	 Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/morepunks.png" },
-	{Name: "coolcats",  Width: 24, Height: 24,
+
+	 {Name: "bwpunks",  Width: 24, Height: 24,
+	  Path: "./bwpunks.png",
+	  Url: "https://github.com/pixelartexchange/collections/raw/master/bwpunks-24x24.png",
+	  Background: true },
+
+
+	 {Name: "coolcats",  Width: 24, Height: 24,
 	 Path: "./coolcats.png",
 	 Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/coolcats.png" },
+
+
+	 {Name: "blockydoge",  Width: 60, Height: 60,
+	 Path: "./blockydoge.png",
+   Url: "https://github.com/pixelartexchange/collections/raw/master/blockydoge/blockydoge-60x60.png",
+	 Background: true },
+
+	 {Name: "dooggies",  Width: 32, Height: 32,
+	 Path: "./dooggies.png",
+   Url: "https://github.com/pixelartexchange/collections/raw/master/dooggies-32x32.png",
+	 Background: true },
+
+	 {Name: "wiener",  Width: 32, Height: 32,
+	 Path: "./wiener.png",
+   Url: "https://github.com/pixelartexchange/collections/raw/master/wiener-32x32.png",
+	 Background: true },
 }
 
 
@@ -154,26 +185,71 @@ func downloadImage( url, outpath string ) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer resp.Body.Close()
 
-   // todo/check: use io.Copy( resp.Body, f ) for streaming/ saving - why? why not?
+	// todo/fix:
+	//  (double) check for content type - why? why not?
 
-	b, err := ioutil.ReadAll( resp.Body )
-	resp.Body.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
+	fmt.Printf( "HTTP %v\n", resp.StatusCode )
+  // dump  headers for debugging
+  for name, headers := range resp.Header {
+	  for _, h := range headers {
+		  fmt.Printf( "  %v: %v\n", name, h )
+	  }
+  }
 
-	f, err := os.Create( outpath )
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
+	 f, err := os.Create( outpath )
+	 if err != nil {
+		 log.Fatal(err)
+	 }
+	 defer f.Close()
 
-	n, err := f.Write( b )
-	fmt.Printf( "  writing %d byte(s) to %s...\n", n, outpath )
+
+   // todo/check: use io.Copy( f, resp.Body ) for streaming/ saving - why? why not?
+   //
+	 // ==> Downloading https://github.com/pixelartexchange/collections/blob/master/dooggies-32x32.png...
+   //   writing 173838 byte(s) to ./dooggies.png...
+   //   will stop/fial - should be +1.5 MBs
+
+   n, err := io.Copy( f, resp.Body )   // Copy( writer, reader )
+	 if err != nil {
+		  fmt.Printf( "  !! ERROR - writing %d byte(s) to %s...\n", n, outpath )
+		  log.Fatal(err)
+	 }
+	 fmt.Printf( "  writing %d byte(s) to %s...\n", n, outpath )
+
+	  // b, err := ioutil.ReadAll( resp.Body )
+		// if err != nil {
+		//	log.Fatal(err)
+		// }
+ 	  // n, err := f.Write( b )
+
 }
 
 
+
+func parseHexColor(s string) (c color.RGBA, err error) {
+	c.A = 0xff
+
+	if strings.HasPrefix(s, "#") {
+     s = s[1:]   /// cut-off leading (prefix)
+	}
+
+	switch len(s) {
+	case 6:
+		_, err = fmt.Sscanf(s, "%02x%02x%02x", &c.R, &c.G, &c.B)
+	case 3:
+		_, err = fmt.Sscanf(s, "%1x%1x%1x", &c.R, &c.G, &c.B)
+		// Double the hex digits:
+		c.R *= 17
+		c.G *= 17
+		c.B *= 17
+	default:
+		err = fmt.Errorf("invalid length, must be 7 or 4")
+
+	}
+	return
+}
 
 
 
@@ -330,20 +406,38 @@ func handleCollectionImage( col collection ) gin.HandlerFunc  {
 
 
 
+
+
 	y, x := divmod( id, cols)
 	fmt.Printf( "  #%d - tile @ x/y %d/%d... ", id, x, y )
 
 
 	tile := image.NewRGBA( image.Rect(0,0, tile_width, tile_height) )
 
-	// To initialize a new image to all-blue:
-	// blue := color.RGBA{0, 0, 255, 255}
-	// use Image.ZP for image.Point{0,0} - why? why not?
-	// draw.Draw( tile, tile.Bounds(), &image.Uniform{blue}, image.Point{0,0}, draw.Src )
+
+
+	backgroundParam := ctx.DefaultQuery( "background", "" )
+	if backgroundParam == "" {
+		backgroundParam = ctx.DefaultQuery( "bg", "" )  // allow shortcut z too
+	}
+
+	if backgroundParam != "" {
+		 fmt.Printf( "=> parsing background color (in hex) >%s<...\n", backgroundParam )
+
+     background, err := parseHexColor( backgroundParam )
+     if err != nil {
+			 // todo/fix:  only report parse color error and continue? why? why not?
+			 log.Panic( err )
+		 }
+
+	  /// use Image.ZP for image.Point{0,0} - why? why not?
+	   draw.Draw( tile, tile.Bounds(), &image.Uniform{ background}, image.Point{0,0}, draw.Src )
+	}
 
 	// sp (starting point) in composite
 	sp    := image.Point{ x*tile_width, y*tile_height}
-	draw.Draw( tile, tile.Bounds(), composite, sp, draw.Src )   // draw.Over )
+	draw.Draw( tile, tile.Bounds(), composite, sp, draw.Over )
+	//  draw.Src )   // draw.Over )
 	// note: was draw.Src
 
   if zoom > 1 {
@@ -398,7 +492,7 @@ func main() {
 		router.GET( "/" + c.Name + "/:id", handleCollectionImage( c ) )
 	}
 
-	router.Run( ":8080" )
+	router.Run( "localhost:8080" )
 
 
 	fmt.Println( "Bye!")
