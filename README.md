@@ -45,8 +45,20 @@ The pixel art collections pre-configured include:
 To get pixel art images, use `/:name/:id`
 
 Example:
-`/punks/0`, `/punks/1`, `/punks/2`, ... or
-`/coolcats/0`, `/coolcats/1`, `/coolcats/2`, ...
+`/punks/0`, `/punks/1`, `/punks/2`, ...
+
+![](i/punks-000000.png)
+![](i/punks-000001.png)
+![](i/punks-000002.png)
+
+
+or `/coolcats/0`, `/coolcats/1`, `/coolcats/2`, ...
+
+![](i/coolcats-000000.png)
+![](i/coolcats-000001.png)
+![](i/coolcats-000002.png)
+
+
 
 Note: The default image size is the default
 (minimum) pixel size of the collection e.g. 24x24 for punks, morepunks,
@@ -54,13 +66,37 @@ coolcats and so on.
 Use the z (zoom) parameter to upsize.
 
 Try 2x:
-`/punks/0?z=2`, `/punks/1?z=2`, `/punks/2?z=2`, ... or
-`/coolcats/0?z=2`, `/coolcats/1?z=2`, `/coolcats/2?z=2`, ...
+`/punks/0?z=2`, `/punks/1?z=2`, `/punks/2?z=2`, ...
+
+![](i/punks-000000@2x.png)
+![](i/punks-000001@2x.png)
+![](i/punks-000002@2x.png)
+
+
+or `/coolcats/0?z=2`, `/coolcats/1?z=2`, `/coolcats/2?z=2`, ...
+
+![](i/coolcats-000000@2x.png)
+![](i/coolcats-000001@2x.png)
+![](i/coolcats-000002@2x.png)
+
+
 
 
 Try 8x:
-`/punks/0?z=8`, `/punks/1?z=8`, `/punks/2?z=8`, ... or 
-`/coolcats/0?z=8`, `/coolcats/1?z=8`, `/coolcats/2?z=8`, ...  And so on.
+`/punks/0?z=8`, `/punks/1?z=8`, `/punks/2?z=8`, ...
+
+![](i/punks-000000@8x.png)
+![](i/punks-000001@8x.png)
+![](i/punks-000002@8x.png)
+
+
+or `/coolcats/0?z=8`, `/coolcats/1?z=8`, `/coolcats/2?z=8`, ...  And so on.
+
+![](i/coolcats-000000@8x.png)
+![](i/coolcats-000001@8x.png)
+![](i/coolcats-000002@8x.png)
+
+
 
 
 That's it for now.
