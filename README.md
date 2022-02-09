@@ -131,7 +131,7 @@ in red/green/blue (rgb) hexcode `#60a4f7`:
 
 
 
-####  Bonus  - Phree the Phunks! Philip!
+####  Bonus  -  Philip! Phree the Phunks!
 
 Let's try to flip vertically, that is, mirror, the images -
 that turns right-looking images into left-looking and vice versa.
