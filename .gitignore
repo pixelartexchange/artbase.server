@@ -22,8 +22,11 @@ go.work
 
 
 ###
-# note: ignore all (cached) .png images in root
+# note: ignore all (cached) .png and .svg images in root
 /*.png
+/*.svg
+
+
 
 
 

@@ -44,17 +44,23 @@ The pixel art collections pre-configured include:
 ### (Web) Services
 
 
-To get pixel art images, use `/:name/:id`. Example:
+To get pixel art images, use `/:name/:id[.png|.svg]`.
 
+Let's try the (default)
+binary raster graphics format
+using the portable network graphics (.png) encoding.
+Example:
 
-`/punks/0`, `/punks/1`, `/punks/2`, ...
+`/punks/0`, `/punks/1`, `/punks/2`,
+(same as `/punks/0.png`, `/punks/1.png`, `/punks/2.png`) ...
 
 ![](i/punks-000000.png)
 ![](i/punks-000001.png)
 ![](i/punks-000002.png)
 
 
-or `/coolcats/0`, `/coolcats/1`, `/coolcats/2`, ...
+or `/coolcats/0`, `/coolcats/1`, `/coolcats/2`,
+(same as `/coolcats/0.png`, `/coolcats/1.png`, `/coolcats/2.png`)  ...
 
 ![](i/coolcats-000000.png)
 ![](i/coolcats-000001.png)
@@ -62,7 +68,32 @@ or `/coolcats/0`, `/coolcats/1`, `/coolcats/2`, ...
 
 
 
-#### z (zoom) Parameter - 2x, 4x, 8x, 10x, 20x ...
+Let's try the scalable vector graphics (.svg) format in text.
+Example:
+
+
+`/punks/0.svg`, `/punks/1.svg`, `/punks/2.svg`, ...
+
+![](i/punks-000000.svg)
+![](i/punks-000001.svg)
+![](i/punks-000002.svg)
+
+
+or `/coolcats/0.svg`, `/coolcats/1.svg`, `/coolcats/2.svg`,  ...
+
+![](i/coolcats-000000.svg)
+![](i/coolcats-000001.svg)
+![](i/coolcats-000002.svg)
+
+
+Note: Pixels get "encoded" as rectangle "shapes" with a width and height
+of one (1×1).  Transparent pixels
+with the red/green/blue/alpha (rgba) value of (0 or 0/0/0/0)
+get dropped.
+
+
+
+#### z (zoom) Parameter - 2x, 4x, 8x, 10x, 20x ...   (.png only)
 
 
 Note: The default image size is the default
@@ -107,7 +138,7 @@ or `/coolcats/0?z=8`, `/coolcats/1?z=8`, `/coolcats/2?z=8`, ...  And so on.
 
 
 
-#### bg (background) Parameter
+#### bg (background) Parameter    (.png only)
 
 Let's try adding the classic gray-ish/blue-ish v2 background
 in red/green/blue (rgb) hexcode `#638596`.
@@ -128,6 +159,7 @@ in red/green/blue (rgb) hexcode `#60a4f7`:
 ![](i/punks-000000_(v3).png)
 ![](i/punks-000001_(v3).png)
 ![](i/punks-000002_(v3).png)
+
 
 
 
