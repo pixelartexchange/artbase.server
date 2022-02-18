@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"image"
 	"image/png"
-	"image/draw"
+	"image/color"
 	"os"
 	"log"
-	"errors"
   "strings"
 	"strconv"
 	"bytes"
@@ -18,33 +17,6 @@ import (
 	"./pixelart"
 )
 
-
-
-
-
-// check if divod exists built-in - different name or such ??
-func divmod(numerator, denominator int) (quotient, remainder int) {
-	quotient  = numerator / denominator   // integer division, decimals are truncated
-	remainder = numerator % denominator
-	return
-}
-
-
-
-
-
-
-
-func fileExist(name string) (bool, error) {
-	_, err := os.Stat(name)
-	if err == nil {
-			return true, nil
-	}
-	if errors.Is(err, os.ErrNotExist) {
-			return false, nil
-	}
-	return false, err
-}
 
 
 
@@ -61,7 +33,6 @@ const (
 
 
 
-var cache map[string]image.Image
 
 
 func handleHome( collections []artbase.Collection ) gin.HandlerFunc  {
@@ -81,53 +52,10 @@ func handleCollection( col artbase.Collection ) gin.HandlerFunc  {
 
 
 func handleCollectionImage( col artbase.Collection ) gin.HandlerFunc  {
-	// check if collection is in cache
   return func( ctx *gin.Context ) {
 
-		path := col.Path
 
-	if exist, _ := fileExist( path ); !exist  {
-    fmt.Println( "  getting composite / download to (local) cache..." )
-
-		url := col.Url
-		pixelart.Download( url, path )
-	}
-
-
-	name                    := col.Name
-	tile_width, tile_height := col.Width, col.Height   // in px
-
-
-  var img image.Image
-
-
-	if cache[ name ] != nil {
-		 fmt.Println( "    bingo! (re)using in-memory composite image from cache...\n" )
-     img = cache[ name ]
-	} else {
-		 fmt.Println( "   adding composite image to in-memory cache...\n" )
-	   img = pixelart.ReadImagePNG( path )
-		 cache[ name ] = img
-	}
-
-  composite := img
-
-
-	bounds := composite.Bounds()
-	fmt.Println( bounds )
-	// e.g.   punks.png  (0,0)-(2400,2400)
-
-	width, height := bounds.Max.X, bounds.Max.Y
-
-	cols, rows  :=   width / tile_width,  height / tile_height
-
-	tile_count := cols * rows
-
-
-	fmt.Printf( "composite %dx%d (cols x rows) - %d tiles - %dx%d (width x height) \n",
-									 cols, rows, tile_count, tile_width, tile_height )
-	fmt.Println()
-
+		name := col.Name
 
 	////////////////////////////////////////////////////
 	// note: for now id might optionally include an extension
@@ -144,25 +72,9 @@ func handleCollectionImage( col artbase.Collection ) gin.HandlerFunc  {
 
 
 
-
-
-	y, x := divmod( id, cols)
-	fmt.Printf( "  #%d - tile @ x/y %d/%d... ", id, x, y )
-
-
-	//
-	// todo/fix: change to newNRGBA (better match for png - why? why not?)
-	tile := image.NewRGBA( image.Rect(0,0, tile_width, tile_height) )
-
-
   if format == "svg" {
 
-// sp (starting point) in composite
-sp    := image.Point{ x*tile_width, y*tile_height}
-draw.Draw( tile, tile.Bounds(), composite, sp, draw.Over )
-//  draw.Src )   // draw.Over )
-// note: was draw.Src
-
+		tile := col.Tile( id, nil )    // no background (color) - use nil
 
 mirrorParam := ctx.DefaultQuery( "mirror", "0" )
 if mirrorParam == "0" || mirrorParam[0] == 'f' || mirrorParam[0] == 'n'  {
@@ -205,17 +117,18 @@ if mirrorParam == "1" || mirrorParam[0] =='t' || mirrorParam[0] =='y' {
 
 
    fmt.Printf( "%s-%d.svg %dx%d image - %d byte(s)\n", name, id,
-							 tile_width, tile_height,
+							 col.Width, col.Height,
 							 len( buf ))
 
 ctx.Data( http.StatusOK, ContentTypeImageSVG,  []byte( buf ) )
 
 
-
-
-
-
 	} else {   // assume "png" format
+
+
+
+  var background color.Color = nil   // interface by default (zero-value) nil??
+  var err error              = nil   // interface by default (zero-value) nil??
 
 	backgroundParam := ctx.DefaultQuery( "background", "" )
 	if backgroundParam == "" {
@@ -225,22 +138,14 @@ ctx.Data( http.StatusOK, ContentTypeImageSVG,  []byte( buf ) )
 	if backgroundParam != "" {
 		 fmt.Printf( "=> parsing background color (in hex) >%s<...\n", backgroundParam )
 
-     background, err := pixelart.ParseColor( backgroundParam )
+     background, err = pixelart.ParseColor( backgroundParam )
      if err != nil {
 			 // todo/fix:  only report parse color error and continue? why? why not?
 			 log.Panic( err )
 		 }
-
-	  /// use Image.ZP for image.Point{0,0} - why? why not?
-	   draw.Draw( tile, tile.Bounds(), &image.Uniform{ background}, image.Point{0,0}, draw.Src )
 	}
 
-	// sp (starting point) in composite
-	sp    := image.Point{ x*tile_width, y*tile_height}
-	draw.Draw( tile, tile.Bounds(), composite, sp, draw.Over )
-	//  draw.Src )   // draw.Over )
-	// note: was draw.Src
-
+  tile := col.Tile( id, background )
 
 
 	mirrorParam := ctx.DefaultQuery( "mirror", "0" )
@@ -251,7 +156,6 @@ ctx.Data( http.StatusOK, ContentTypeImageSVG,  []byte( buf ) )
   if mirrorParam == "1" || mirrorParam[0] =='t' || mirrorParam[0] =='y' {
 		tile, _ = pixelart.MirrorImage( tile )
 	}
-
 
 
 
@@ -307,7 +211,7 @@ ctx.Data( http.StatusOK, ContentTypeImageSVG,  []byte( buf ) )
 
 	bytesTile := buf.Bytes()
   fmt.Printf( "%s-%d@%dx png %dx%d image - %d byte(s)\n", name, id, zoom,
-	               tile_width, tile_height,
+	               col.Width, col.Height,
 	               len( bytesTile ))
 
 	ctx.Data( http.StatusOK, ContentTypeImagePNG, bytesTile )
@@ -318,17 +222,27 @@ ctx.Data( http.StatusOK, ContentTypeImageSVG,  []byte( buf ) )
 
 
 func main() {
-	fmt.Printf( "%d collection(s):\n", len( collections ))
-	fmt.Println( collections )
+
+
+	fmt.Printf( "%d collection(s):\n", len( artbase.Collections ))
+	fmt.Println( artbase.Collections )
+
 
   fmt.Println( "cache:" )
-  fmt.Println( cache )
+  fmt.Println( artbase.Cache )
 
 	// check if make is required for setup to avoid crash / panic!!!
-	cache = make( map[string]image.Image )
+	artbase.Cache = make( map[string]image.Image )
 
   fmt.Println( "cache:" )
-	fmt.Println( cache )
+	fmt.Println( artbase.Cache )
+
+
+
+  //// note:
+	// use built-in "standard" collections for now,
+	//   yes, you can - use / set-up your own collections
+	collections := artbase.Collections
 
 
 	compileTemplates()

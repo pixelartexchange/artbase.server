@@ -1,12 +1,11 @@
-package main
-
-import (
-	"./artbase"
-)
+package artbase
 
 
+///////
+//  default "standard" builtin collections for easy (re)use
 
-var collections = []artbase.Collection{
+
+var Collections = []Collection{
   {Name: "punks",     Width: 24, Height: 24,
 	 Path: "./punks.png",
 	 Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/punks.png" },
