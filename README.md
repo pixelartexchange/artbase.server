@@ -8,7 +8,7 @@
 Use / issue / type  (in the `/artbase.server` directory):
 
 ```
-$ go build artbase.go     #
+$ go build artbase.go
 ```
 
 to get a zero-config x-copy binary for your operation system / architecture.
