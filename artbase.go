@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"image"
+	// "image"
 	"image/png"
 	"image/color"
 	"os"
@@ -37,14 +37,14 @@ const (
 
 func handleHome( collections []artbase.Collection ) gin.HandlerFunc  {
   return func( ctx *gin.Context ) {
-		 b := renderHome( collections )
+		 b := artbase.RenderHome( collections )
 		 ctx.Data( http.StatusOK, ContentTypeHTML, b )
 	}
 }
 
 func handleCollection( col artbase.Collection ) gin.HandlerFunc  {
   return func( ctx *gin.Context ) {
-		 b := renderCollection( &col )
+		 b := artbase.RenderCollection( &col )
 		 ctx.Data( http.StatusOK, ContentTypeHTML, b )
 	}
 }
@@ -227,16 +227,8 @@ func main() {
 	fmt.Printf( "%d collection(s):\n", len( artbase.Collections ))
 	fmt.Println( artbase.Collections )
 
-
   fmt.Println( "cache:" )
   fmt.Println( artbase.Cache )
-
-	// check if make is required for setup to avoid crash / panic!!!
-	artbase.Cache = make( map[string]image.Image )
-
-  fmt.Println( "cache:" )
-	fmt.Println( artbase.Cache )
-
 
 
   //// note:
@@ -244,8 +236,6 @@ func main() {
 	//   yes, you can - use / set-up your own collections
 	collections := artbase.Collections
 
-
-	compileTemplates()
 
 
 	router := gin.Default()

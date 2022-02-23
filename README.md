@@ -5,18 +5,17 @@
 ## Build & Run From Source
 
 
-Use
+Use / issue / type  (in the `/artbase.server` directory):
 
 ```
-$ cd artbase.server
-$ go build
+$ go build artbase.go     #
 ```
 
 to get a zero-config x-copy binary for your operation system / architecture.
 To run use:
 
 ```
-$ artbase.server
+$ artbase
 ```
 
 This will start-up a (web) server (listening on port 8080).

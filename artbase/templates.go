@@ -1,11 +1,16 @@
-package main
+package artbase
 
 import (
 	"html/template"
 	"bytes"
-
-	"./artbase"
+	"fmt"
 )
+
+
+
+//////
+// default built-in templates
+//   use artbase.Templates to overwrite / change
 
 
 
@@ -91,28 +96,38 @@ const templateIndex = `
 
 ///
 // todo/check if template.Template is an interface - if yes, no need for pointer!!
+//
+//  note: template.Template is a struct with a pointer to parse.Tree
+//             (NOT an interface), thus, use *template (pointer)
 
-var templates map[string]*template.Template
+var Templates = make( map[string]*template.Template )
+
+
+
+
+
+func init() {
+	fmt.Println( "  [artbase.init] compileTemplates" )
+  compileTemplates()
+}
 
 func compileTemplates() {
-	if templates == nil {
-		templates = make( map[string]*template.Template )
-
-    templates["home"]  = template.Must( template.New("home").Parse( templateHome ))
-		templates["index"] = template.Must( template.New("index").Parse( templateIndex ))
-	}
+  Templates["home"]  = template.Must( template.New("home").Parse( templateHome ))
+	Templates["index"] = template.Must( template.New("index").Parse( templateIndex ))
 }
 
 
-func renderHome( data []artbase.Collection ) []byte {
+
+func RenderHome( data []Collection ) []byte {
 	buf := new( bytes.Buffer )
-	templates["home"].Execute( buf, data )
+	Templates["home"].Execute( buf, data )
 	return buf.Bytes()
 }
 
-func renderCollection( data *artbase.Collection ) []byte {
+
+func RenderCollection( data *Collection ) []byte {
 	buf := new( bytes.Buffer )
-	templates["index"].Execute( buf, data )
+	Templates["index"].Execute( buf, data )
 	return buf.Bytes()
 }
 

@@ -28,7 +28,8 @@ func fileExist(name string) (bool, error) {
 /////
 //  todo/check -  make (local) cache public - why? why not?
 //                              or just keep as "internal" detail
-var Cache map[string]image.Image
+//  note: remember map always requires make or map literal to init/setup
+var Cache = make( map[string]image.Image )
 
 
 ///////////////////////////////
