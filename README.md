@@ -18,7 +18,7 @@ To run use:
 $ artbase
 ```
 
-This will start-up a (web) server (listening on port 8080). To test open up `http://localhost:8080` in your browser (get the index web page listing all collections).
+This will start-up a (web) server (listening on port 8080). To test open up `http://localhost:8080` in your browser (to get the index web page listing all collections).
 
 
 
