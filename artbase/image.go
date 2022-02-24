@@ -13,9 +13,12 @@ import (
 )
 
 
+///
+// check - change ImageOpts & HandleImage to
+//                TileOpts & HandleTile  - why? why not?
 
 
-type ImageOpts struct {
+type PNGOpts struct {
 	 Background color.Color  // default: nil
 	 BackgroundName string   // default: ""
 	 Mirror bool             // default: false
@@ -23,9 +26,9 @@ type ImageOpts struct {
 	 Save bool                // default: false
 }
 
-func HandleCollectionImage( col *Collection,
-	                          id int,
-														opts ImageOpts )  []byte  {
+
+func (col *Collection) HandleTilePNG( id int,
+										                opts PNGOpts )  []byte  {
 
 
   tile := col.Tile( id, opts.Background )  // no background (color) - use nil
@@ -93,16 +96,15 @@ func HandleCollectionImage( col *Collection,
 
 
 
-type ImageSVGOpts struct  {
+type SVGOpts struct  {
 	Background color.Color  // default: nil
 	BackgroundName string   // default: ""
 	Mirror bool             // default: false
 	Save bool                // default: false
 }
 
-func HandleCollectionImageSVG( col *Collection,
-	                          id int,
-														opts ImageSVGOpts )  []byte  {
+func (col *Collection) HandleTileSVG( id int,
+														          opts SVGOpts )  []byte  {
 
   tile := col.Tile( id, nil )
 
