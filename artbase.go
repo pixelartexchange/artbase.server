@@ -3,13 +3,12 @@ package main
 import (
 	"fmt"
 	// "image"
-	"image/png"
+	// "image/png"
 	"image/color"
-	"os"
 	"log"
   "strings"
 	"strconv"
-	"bytes"
+	// "bytes"
 	"net/http"
 	"github.com/gin-gonic/gin"
 
@@ -54,9 +53,6 @@ func handleCollection( col artbase.Collection ) gin.HandlerFunc  {
 func handleCollectionImage( col artbase.Collection ) gin.HandlerFunc  {
   return func( ctx *gin.Context ) {
 
-
-		name := col.Name
-
 	////////////////////////////////////////////////////
 	// note: for now id might optionally include an extension
 	//                e.g. .png, .svg etc.
@@ -71,10 +67,9 @@ func handleCollectionImage( col artbase.Collection ) gin.HandlerFunc  {
 	}
 
 
-
   if format == "svg" {
 
-		tile := col.Tile( id, nil )    // no background (color) - use nil
+		opts := artbase.ImageSVGOpts{}
 
 mirrorParam := ctx.DefaultQuery( "mirror", "0" )
 if mirrorParam == "0" || mirrorParam[0] == 'f' || mirrorParam[0] == 'n'  {
@@ -82,53 +77,31 @@ if mirrorParam == "0" || mirrorParam[0] == 'f' || mirrorParam[0] == 'n'  {
 }
 
 if mirrorParam == "1" || mirrorParam[0] =='t' || mirrorParam[0] =='y' {
-	tile, _ = pixelart.MirrorImage( tile )
+	  opts.Mirror = true
 }
-
-  buf :=  pixelart.ImageToSVG( tile )
-
 
 	saveParam := ctx.DefaultQuery( "save", "0" )
 	if saveParam == "0" || saveParam[0] == 'f' || saveParam[0] == 'n'  {
 		saveParam = ctx.DefaultQuery( "s", "0" )  // allow shortcut s too
 	}
 
-
   if saveParam == "1" || saveParam[0] =='t' || saveParam[0] =='y' {
-
-    basename := fmt.Sprintf( "%s-%06d", name, id )
-
-	  if mirrorParam == "1" || mirrorParam[0] == 't' || mirrorParam[0] == 'y' {
-			basename = fmt.Sprintf( "%s_mirror", basename )
-		}
-
-		outpath := fmt.Sprintf( "./%s.svg", basename )
-
-		fmt.Printf( "  saving image to >%s<...\n", outpath )
-
-		fout, err := os.Create( outpath )
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer fout.Close()
-
-		fout.WriteString( buf )
-	}
+    opts.Save = true
+  }
 
 
-   fmt.Printf( "%s-%d.svg %dx%d image - %d byte(s)\n", name, id,
-							 col.Width, col.Height,
-							 len( buf ))
+	bytes := artbase.HandleCollectionImageSVG( &col, id, opts )
 
-ctx.Data( http.StatusOK, ContentTypeImageSVG,  []byte( buf ) )
-
+  ctx.Data( http.StatusOK, ContentTypeImageSVG, bytes )
 
 	} else {   // assume "png" format
 
 
-
   var background color.Color = nil   // interface by default (zero-value) nil??
   var err error              = nil   // interface by default (zero-value) nil??
+
+
+	opts := artbase.ImageOpts{}
 
 	backgroundParam := ctx.DefaultQuery( "background", "" )
 	if backgroundParam == "" {
@@ -143,10 +116,10 @@ ctx.Data( http.StatusOK, ContentTypeImageSVG,  []byte( buf ) )
 			 // todo/fix:  only report parse color error and continue? why? why not?
 			 log.Panic( err )
 		 }
+
+		 opts.Background     = background
+		 opts.BackgroundName = backgroundParam
 	}
-
-  tile := col.Tile( id, background )
-
 
 	mirrorParam := ctx.DefaultQuery( "mirror", "0" )
 	if mirrorParam == "0" || mirrorParam[0] == 'f' || mirrorParam[0] == 'n'  {
@@ -154,9 +127,8 @@ ctx.Data( http.StatusOK, ContentTypeImageSVG,  []byte( buf ) )
 	}
 
   if mirrorParam == "1" || mirrorParam[0] =='t' || mirrorParam[0] =='y' {
-		tile, _ = pixelart.MirrorImage( tile )
+		opts.Mirror = true
 	}
-
 
 
 	zoomParam := ctx.DefaultQuery( "zoom", "0" )
@@ -167,8 +139,7 @@ ctx.Data( http.StatusOK, ContentTypeImageSVG,  []byte( buf ) )
 	zoom, _ := strconv.Atoi( zoomParam )
 
   if zoom > 1 {
-		fmt.Printf( " %dx zooming...\n", zoom )
-		tile, _ = pixelart.ZoomImage( tile, zoom )
+		opts.Zoom = zoom
 	}
 
 
@@ -178,46 +149,19 @@ ctx.Data( http.StatusOK, ContentTypeImageSVG,  []byte( buf ) )
 	}
 
   if saveParam == "1" || saveParam[0] =='t' || saveParam[0] =='y' {
-
-    basename := fmt.Sprintf( "%s-%06d", name, id )
-
-		if zoom > 1 {
-      basename = fmt.Sprintf( "%s@%dx", basename, zoom )
-		}
-    if mirrorParam == "1" || mirrorParam[0] == 't' || mirrorParam[0] == 'y' {
-			basename = fmt.Sprintf( "%s_mirror", basename )
-		}
-		if backgroundParam != "" {
-			basename = fmt.Sprintf( "%s_(%s)", basename, backgroundParam )
-		}
-
-		outpath := fmt.Sprintf( "./%s.png", basename )
-
-		fmt.Printf( "  saving image to >%s<...\n", outpath )
-
-		fout, err := os.Create( outpath )
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer fout.Close()
-
-		png.Encode( fout, tile )
+    opts.Save = true
 	}
 
 
+	bytes := artbase.HandleCollectionImage( &col, id, opts )
 
-	buf := new( bytes.Buffer )
-	_ = png.Encode( buf, tile )
 
-	bytesTile := buf.Bytes()
-  fmt.Printf( "%s-%d@%dx png %dx%d image - %d byte(s)\n", name, id, zoom,
-	               col.Width, col.Height,
-	               len( bytesTile ))
-
-	ctx.Data( http.StatusOK, ContentTypeImagePNG, bytesTile )
+	ctx.Data( http.StatusOK, ContentTypeImagePNG, bytes )
   }
   }
 }
+
+
 
 
 
