@@ -27,7 +27,7 @@ const templateHome = `
           {{end}}
 
 					<span style="font-size: 80%">
-					  <a href="{{ .Url }}">(Download .png)</a>
+					  <a href="{{ .Url }}" title="@ {{ .Url }}">(Download .png)</a>
 					</span>
 				</li>
     {{end}}
@@ -38,7 +38,7 @@ const templateHome = `
 
 <p style="font-size: 80%">
   New to artbase? Find out more at
-	<a href="https://github.com/pixelartexchange/artbase">/artbase »</a>
+	<a href="https://github.com/pixelartexchange/artbase.server">/artbase »</a>
 </p>
 `
 
@@ -48,7 +48,18 @@ const templateIndex = `
   <a href="/">« Collections</a>
 </p>
 
-<h1>{{ .Name}}   ({{ .Width}}×{{ .Height}}) Collection</h1>
+<h1>{{ .Name}}   ({{ .Width}}×{{ .Height}}) Collection
+{{if .Background}}
+- Incl. Backgrounds
+{{end}}
+</h1>
+
+<p>
+<span style="font-size: 80%">
+<a href="{{ .Url }}" title="@ {{ .Url }}">(Download .png)</a>
+</span>
+</p>
+
 
 <p>
   To get images, use /{{ .Name}}/<em>:id</em>
@@ -58,8 +69,15 @@ const templateIndex = `
 	Example:
 	<a href="/{{ .Name}}/0">/{{ .Name}}/0</a>,
 	<a href="/{{ .Name}}/1">/{{ .Name}}/1</a>,
-	<a href="/{{ .Name}}/2">/{{ .Name}}/2</a>, ...
+	<a href="/{{ .Name}}/2">/{{ .Name}}/2</a>, ... resulting in ...
 </p>
+
+<p>
+  <img src="/{{ .Name}}/0.png" title="/{{ .Name}}/0.png">
+	<img src="/{{ .Name}}/1.png" title="/{{ .Name}}/1.png">
+	<img src="/{{ .Name}}/2.png" title="/{{ .Name}}/2.png">
+</p>
+
 
 <p>
 	Note: The default image size is ({{ .Width}}×{{ .Height}}).
@@ -69,15 +87,31 @@ const templateIndex = `
 	 Try 2x:
 	 <a href="/{{ .Name}}/0?z=2">/{{ .Name}}/0?z=2</a>,
 	 <a href="/{{ .Name}}/1?z=2">/{{ .Name}}/1?z=2</a>,
-	 <a href="/{{ .Name}}/2?z=2">/{{ .Name}}/2?z=2</a>, ...
+	 <a href="/{{ .Name}}/2?z=2">/{{ .Name}}/2?z=2</a>, ... resulting in ...
 </p>
+
+<p>
+  <img src="/{{ .Name}}/0.png?z=2" title="/{{ .Name}}/0.png?z=2">
+	<img src="/{{ .Name}}/1.png?z=2" title="/{{ .Name}}/1.png?z=2">
+	<img src="/{{ .Name}}/2.png?z=2" title="/{{ .Name}}/2.png?z=2">
+</p>
+
+
 
 <p>
 	 Try 8x:
 	 <a href="/{{ .Name}}/0?z=8">/{{ .Name}}/0?z=8</a>,
 	 <a href="/{{ .Name}}/1?z=8">/{{ .Name}}/1?z=8</a>,
-	 <a href="/{{ .Name}}/2?z=8">/{{ .Name}}/2?z=8</a>, ...
+	 <a href="/{{ .Name}}/2?z=8">/{{ .Name}}/2?z=8</a>, ... resulting in ...
+</p>
 
+<p>
+  <img src="/{{ .Name}}/0.png?z=8" title="/{{ .Name}}/0.png?z=8">
+	<img src="/{{ .Name}}/1.png?z=8" title="/{{ .Name}}/1.png?z=8">
+	<img src="/{{ .Name}}/2.png?z=8" title="/{{ .Name}}/2.png?z=8">
+</p>
+
+<p>
 	 And so on.
 </p>
 
@@ -87,7 +121,7 @@ const templateIndex = `
 
 <p style="font-size: 80%">
   New to artbase? Find out more at
-	<a href="https://github.com/pixelartexchange/artbase">/artbase »</a>
+	<a href="https://github.com/pixelartexchange/artbase.server">/artbase »</a>
 </p>
 
 `

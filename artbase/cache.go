@@ -7,6 +7,7 @@ import (
 	"image/draw"
 	"os"
 	"errors"
+	"sync"
 
 	"../pixelart"   // todo/check if relative to "root" or package ???
 )
@@ -32,20 +33,25 @@ func fileExist(name string) (bool, error) {
 var Cache = make( map[string]image.Image )
 
 
-///////////////////////////////
-//  get image - if not present in (local) cache - (auto-)download first!!!
+///
+//  note: for now use one lock
+//             per collection id (that is, name)
+var mutex = make( map[string]sync.Mutex )
+
 
 func (col *Collection) Image() image.Image  {
+	name := col.Name
+
+	lock := mutex[ name ]
+	lock.Lock()
+	defer lock.Unlock()
 
 	path := col.Path
 
-	if exist, _ := fileExist( path ); !exist  {
-    fmt.Println( "    [artbase-cache] getting composite / download to (local) cache..." )
-
-		pixelart.Download( col.Url, path )
+	if exist, _ := fileExist( path ); !exist {
+  	fmt.Println( "    [artbase-cache] getting composite / download to (local) cache..." )
+	  pixelart.Download( col.Url, path )
 	}
-
-	name := col.Name
 
 	var img image.Image
 
