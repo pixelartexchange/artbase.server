@@ -2,17 +2,13 @@ package main
 
 import (
 	"fmt"
-	// "image"
-	// "image/png"
-	// "image/color"
 	"log"
-  // "strings"
-	// "bytes"
 	"net/http"
-	// "strconv"
 
 	"./artbase"
 	"./pixelart"
+
+	"./router"     // simple http router & helpers from scratch (no 3rd party deps) - replace with your own http libs/frameworks
 )
 
 
@@ -21,7 +17,7 @@ func handleHome( collections []artbase.Collection ) http.HandlerFunc  {
   return func( w http.ResponseWriter, req *http.Request ) {
 		 b := artbase.RenderHome( collections )
 
-		 w.Header().Set( ContentType, ContentTypeHTML )
+		 w.Header().Set( "Content-Type", "text/html; charset=utf-8" )
 		 w.Write( b )
 		}
 }
@@ -30,7 +26,7 @@ func handleCollection( col artbase.Collection ) http.HandlerFunc  {
   return func( w http.ResponseWriter, req *http.Request ) {
 		 b := artbase.RenderCollection( &col )
 
-		 w.Header().Set( ContentType, ContentTypeHTML )
+		 w.Header().Set( "Content-Type", "text/html; charset=utf-8" )
 		 w.Write( b )
 	}
 }
@@ -40,19 +36,18 @@ func handleCollection( col artbase.Collection ) http.HandlerFunc  {
 func handleCollectionImagePNG( col artbase.Collection ) http.HandlerFunc  {
 		return func( w http.ResponseWriter, req *http.Request ) {
 
-	id, _ := URLParamInt( req, "id" )
+	id, _ := router.ParamInt( req, "id" )
 
 	opts := artbase.PNGOpts{}
 
 
-
-	backgroundQuery, ok := URLQuery( req, "background" )
+	backgroundQuery, ok := router.Query( req, "background" )
 	if !ok {
-		backgroundQuery, ok = URLQuery( req, "bg" )  // allow shortcut z too
+		backgroundQuery, ok = router.Query( req, "bg" )  // allow shortcut z too
 	}
 
 	if ok {
-		 fmt.Printf( "=> parsing background color (in hex) >%s<...\n", backgroundQuery )
+		 log.Printf( "=> parsing background color (in hex) >%s<...\n", backgroundQuery )
 
      background, err := pixelart.ParseColor( backgroundQuery )
      if err != nil {
@@ -63,9 +58,9 @@ func handleCollectionImagePNG( col artbase.Collection ) http.HandlerFunc  {
 		 opts.BackgroundName = backgroundQuery
 	}
 
-	mirror, ok := URLQueryBool( req,  "mirror" )
+	mirror, ok := router.QueryBool( req,  "mirror" )
 	if !ok {
-		mirror, ok = URLQueryBool( req,  "m" )  // allow shortcut m too
+		mirror, ok = router.QueryBool( req,  "m" )  // allow shortcut m too
 	}
 
   if mirror {
@@ -73,20 +68,19 @@ func handleCollectionImagePNG( col artbase.Collection ) http.HandlerFunc  {
 	}
 
 
-	zoom, ok := URLQueryInt( req,  "zoom" )
+	zoom, ok := router.QueryInt( req,  "zoom" )
 	if !ok {
-		zoom, ok = URLQueryInt( req,  "z"  )  // allow shortcut z too
+		zoom, ok = router.QueryInt( req,  "z"  )  // allow shortcut z too
 	}
-
 
   if zoom > 1 {
 		opts.Zoom = zoom
 	}
 
 
-	save, ok := URLQueryBool( req,  "save" )
+	save, ok := router.QueryBool( req,  "save" )
 	if !ok {
-		save, ok = URLQueryBool( req,  "s" )  // allow shortcut s too
+		save, ok = router.QueryBool( req,  "s" )  // allow shortcut s too
 	}
 
   if save {
@@ -95,7 +89,7 @@ func handleCollectionImagePNG( col artbase.Collection ) http.HandlerFunc  {
 
 	b := col.HandleTilePNG( id, opts )
 
-	w.Header().Set( ContentType, ContentTypeImagePNG )
+	w.Header().Set( "Content-Type", "image/png" )
 	w.Write( b )
   }
 }
@@ -104,22 +98,22 @@ func handleCollectionImagePNG( col artbase.Collection ) http.HandlerFunc  {
 func handleCollectionImageSVG( col artbase.Collection ) http.HandlerFunc  {
   return func( w http.ResponseWriter, req *http.Request ) {
 
-  id, _ := URLParamInt( req, "id" )
+  id, _ := router.ParamInt( req, "id" )
 
 		opts := artbase.SVGOpts{}
 
-   mirror, ok := URLQueryBool( req, "mirror" )
-   if !ok {
-	   mirror, ok = URLQueryBool( req, "m" )  // allow shortcut m too
+   mirror, ok := router.QueryBool( req, "mirror" )
+	 if !ok {
+	   mirror, ok = router.QueryBool( req, "m" )  // allow shortcut m too
    }
 
    if mirror {
 	   opts.Mirror = true
    }
 
-	 save, ok := URLQueryBool( req, "save" )
+	 save, ok := router.QueryBool( req, "save" )
 	 if !ok {
-		 save, ok = URLQueryBool( req, "s" )  // allow shortcut s too
+		 save, ok = router.QueryBool( req, "s" )  // allow shortcut s too
 	 }
 
   if save {
@@ -128,7 +122,7 @@ func handleCollectionImageSVG( col artbase.Collection ) http.HandlerFunc  {
 
 	b := col.HandleTileSVG( id, opts )
 
-	w.Header().Set( ContentType, ContentTypeImageSVG )
+	w.Header().Set( "Content-Type", "image/svg+xml" )
 	w.Write( b )
   }
 }
@@ -146,22 +140,23 @@ func main() {
 	fmt.Println( collections )
 
 
-	var router Router
 
-	router.GET( "/",  handleHome( collections ) )
+	serve := router.Router{}
+
+	serve.GET( "/",  handleHome( collections ) )
 
 	for i,c := range collections {
 		fmt.Printf( "  [%d] %s  %dx%d - %s\n", i, c.Name, c.Width, c.Height, c.Path )
 
-		router.GET( "/" + c.Name,  handleCollection( c ) )
+		serve.GET( "/" + c.Name,  handleCollection( c ) )
 
 		// note - &c will NOT work - as c as reference gets
 		//          all handlers pointing to last collection!!!!
-		router.GET( "/" + c.Name + `/(?P<id>[0-9]+)(\.png)?`, handleCollectionImagePNG( c ) )
-		router.GET( "/" + c.Name + `/(?P<id>[0-9]+)\.svg`,    handleCollectionImageSVG( c ) )
+		serve.GET( "/" + c.Name + `/(?P<id>[0-9]+)(\.png)?`, handleCollectionImagePNG( c ) )
+		serve.GET( "/" + c.Name + `/(?P<id>[0-9]+)\.svg`,    handleCollectionImageSVG( c ) )
 	}
 
-	http.ListenAndServe( "localhost:8080", &router )
+	http.ListenAndServe( "localhost:8080", &serve )
 
 	fmt.Println( "Bye!")
 }

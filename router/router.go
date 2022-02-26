@@ -1,8 +1,7 @@
-package main
+package router
 
 
 import (
-	"fmt"
 	"log"
 	"strconv"
 	"regexp"
@@ -36,13 +35,23 @@ type Router struct {
 }
 
 
+/// not working - why?
+//   resulting in:
+//     serve.GET undefined (type func() *router.Router has no field or method GET)
+//
+// func New() *Router {
+//	return &Router{}
+//}
+
+
+
 func (r *Router) Add( route Route ) {
  r.Routes = append( r.Routes, route )
 }
 
 
 func (r *Router) GET( pattern string, handler http.HandlerFunc ) {
-	fmt.Printf( "  adding route - GET %s\n", pattern )
+	log.Printf( "  adding route - GET %s\n", pattern )
 
 	exactPattern := regexp.MustCompile( "^" + pattern + "$" )
 
@@ -86,10 +95,10 @@ func (r *Router) ServeHTTP( w http.ResponseWriter, req *http.Request ) {
 		 // ctx := context.WithValue(r.Context(), "params", params)
 		 // e.HandlerFunc.ServeHTTP(w, r.WithContext(ctx))
 		 // return
-		 fmt.Printf( "==> Bingo! route %s %s matching:\n", req.Method, req.URL.Path )
-		 fmt.Println( route )
-		 fmt.Println( "  params:" )
-		 fmt.Println( params )
+		 log.Printf( "==> Bingo! route %s %s matching:\n", req.Method, req.URL.Path )
+		 log.Println( route )
+		 log.Println( "  params:" )
+		 log.Println( params )
 
 		 // Create new request with params stored in context
 		 ctx := context.WithValue( req.Context(), "params", params )
@@ -98,22 +107,10 @@ func (r *Router) ServeHTTP( w http.ResponseWriter, req *http.Request ) {
  }
 
  // http.NotFound(w, r)
- fmt.Printf( "==> 404! no route %s %s matching\n", req.Method, req.URL.Path )
+ log.Printf( "==> 404! no route %s %s matching\n", req.Method, req.URL.Path )
  http.NotFound( w, req )
 }
 
-
-
-const (
-	ContentType         = "Content-Type"
-	ContentTypeJSON     = "application/json"
-	ContentTypeHTML     = "text/html; charset=utf-8"
-	ContentTypeText     = "text/plain; charset=utf-8"
-	ContentTypeImagePNG = "image/png"
-	ContentTypePNG      = ContentTypeImagePNG
-	ContentTypeImageSVG = "image/svg+xml"
-	ContentTypeSVG      = ContentTypeImageSVG
-)
 
 
 
@@ -123,7 +120,7 @@ const (
 
 
 // URLParam extracts a parameter from the URL by name
-func URLParam( req *http.Request, name string ) (string,bool) {
+func Param( req *http.Request, name string ) (string,bool) {
  ctx := req.Context()
 
  // ctx.Value returns an `interface{}` type, so we
@@ -135,11 +132,11 @@ func URLParam( req *http.Request, name string ) (string,bool) {
  return value, ok
 }
 
-func URLParamInt( req *http.Request, name string ) (int,bool) {
+func ParamInt( req *http.Request, name string ) (int,bool) {
 	value := 0    // default default_value to zero 0 for now
 	var err error
 
-	param, ok := URLParam( req, name )
+	param, ok := Param( req, name )
 	if ok {
 		value, err = strconv.Atoi( param )
     if err != nil {
@@ -150,7 +147,7 @@ func URLParamInt( req *http.Request, name string ) (int,bool) {
 }
 
 
-func URLQuery( req *http.Request, name string ) (string,bool) {
+func Query( req *http.Request, name string ) (string,bool) {
 	value := ""   // default default_value to empty string for now
 
 	q := req.URL.Query()
@@ -163,11 +160,11 @@ func URLQuery( req *http.Request, name string ) (string,bool) {
   return value, ok
 }
 
-func URLQueryInt( req *http.Request, name string ) (int,bool) {
+func QueryInt( req *http.Request, name string ) (int,bool) {
   value := 0  // default default_value to 0 for now - why? why not?
   var err error
 
-	query, ok := URLQuery( req, name )
+	query, ok := Query( req, name )
   if ok {
 		value, err = strconv.Atoi( query )
     if err != nil {
@@ -177,10 +174,10 @@ func URLQueryInt( req *http.Request, name string ) (int,bool) {
 	return value, ok
 }
 
-func URLQueryBool( req *http.Request, name string ) (bool,bool) {
+func QueryBool( req *http.Request, name string ) (bool,bool) {
 	value := false   // default default_value to false for now - why? why not?
 
-	query, ok := URLQuery( req, name )
+	query, ok := Query( req, name )
 	if ok {
 		if query == "1" || query[0] == 't' || query[0] == 'y'  {
 			value  = true
