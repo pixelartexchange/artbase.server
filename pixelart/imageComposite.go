@@ -5,6 +5,9 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
+	"image/png"
+	"os"
+	"log"
 )
 
 
@@ -79,5 +82,20 @@ func (tile *ImageTile) Zoom( zoom int ) *ImageTile {
 func (tile *ImageTile) Mirror() *ImageTile {
 	img, _ := MirrorImage( tile.Image )
 	return &ImageTile{ Image: img }
+}
+
+
+func (tile *ImageTile) Save( path string ) {
+
+	fmt.Printf( "  saving image to >%s<...\n", path )
+
+  // todo/check - auto-create directories in path - why? why not?
+	fout, err := os.Create( path )
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer fout.Close()
+
+	png.Encode( fout, tile )
 }
 
