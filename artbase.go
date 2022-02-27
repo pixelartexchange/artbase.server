@@ -5,10 +5,10 @@ import (
 	"log"
 	"net/http"
 
-	"./artbase"
-	"./pixelart"
+	"github.com/pixelartexchange/artbase.server/artbase"
+	"github.com/pixelartexchange/artbase.server/pixelart"
 
-	"./router"     // simple http router & helpers from scratch (no 3rd party deps) - replace with your own http libs/frameworks
+	"github.com/pixelartexchange/artbase.server/router"     // simple http router & helpers from scratch (no 3rd party deps) - replace with your own http libs/frameworks
 )
 
 
@@ -130,6 +130,15 @@ func handleCollectionImageSVG( col artbase.Collection ) http.HandlerFunc  {
 
 
 func main() {
+
+  //////
+	// for debugging and double check on module print version strings
+	fmt.Println( "go package versions:" )
+	fmt.Println( "  artbase:",  artbase.Version )
+	fmt.Println( "  pixelart:", pixelart.Version )
+	fmt.Println( "  router:",   router.Version )
+  fmt.Println()
+
 
 	//// note:
 	// use built-in "standard" collections for now,

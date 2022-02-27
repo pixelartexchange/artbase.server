@@ -9,7 +9,7 @@ import (
 	"image/png"
 	"bytes"
 
-	"../pixelart"   // todo/check if relative to "root" or package ???
+	"github.com/pixelartexchange/artbase.server/pixelart"   // todo/check if relative to "root" or package ???
 )
 
 
