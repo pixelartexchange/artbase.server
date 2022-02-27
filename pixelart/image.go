@@ -8,7 +8,6 @@ import (
 
 
 
-
 func ZoomImage(img image.Image, zoom int) (*image.RGBA, error) {
 
 	bounds := img.Bounds()

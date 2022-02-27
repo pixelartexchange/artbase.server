@@ -31,15 +31,15 @@ func (col *Collection) HandleTilePNG( id int,
 										                opts PNGOpts )  []byte  {
 
 
-  tile := col.Tile( id, opts.Background )  // no background (color) - use nil
+  tile := col.Image().Tile( id, opts.Background )  // no background (color) - use nil
 
 	if opts.Mirror {
-		tile, _ = pixelart.MirrorImage( tile )
+		tile = tile.Mirror()
 	}
 
   if opts.Zoom > 1 {
 		fmt.Printf( " %dx zooming...\n", opts.Zoom )
-		tile, _ = pixelart.ZoomImage( tile, opts.Zoom )
+		tile = tile.Zoom( opts.Zoom )
 	}
 
 
@@ -106,10 +106,10 @@ type SVGOpts struct  {
 func (col *Collection) HandleTileSVG( id int,
 														          opts SVGOpts )  []byte  {
 
-  tile := col.Tile( id, nil )
+  tile := col.Image().Tile( id, nil )
 
 	if opts.Mirror {
-		tile, _ = pixelart.MirrorImage( tile )
+		tile = tile.Mirror()
 	}
 
   buf :=  pixelart.ImageToSVG( tile )
