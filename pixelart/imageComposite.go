@@ -33,37 +33,45 @@ func divmod(numerator, denominator int) (quotient, remainder int) {
 
 
 
-func (composite *ImageComposite) Tile( id int, background color.Color ) *ImageTile {
-	bounds := composite.Bounds()
-	fmt.Println( bounds )
-	// e.g.   punks.png  (0,0)-(2400,2400)
-	width, height := bounds.Max.X, bounds.Max.Y  // todo/check: use bounds.Dx(), bounds.Dy() ???
 
+func (composite *ImageComposite) MaxTileCount() int {
+  // change to TileCountMax or TileCap(acity) or such - why? why not?
+	//   note: not all tiles might be "filled-up / in-use / painted"
+	//    passed in .Count   should be the real / actual count
+
+	bounds := composite.Bounds()
+	width, height := bounds.Dx(), bounds.Dy()
 
 	cols, rows :=  width / composite.TileWidth,  height / composite.TileHeight
 
-	tile_count := cols * rows
+	tileCount := cols * rows
+	return tileCount
+}
+
+
+func (composite *ImageComposite) Tile( id int ) *ImageTile {
+	bounds := composite.Bounds()
+	// fmt.Println( bounds )
+	// e.g.   punks.png  (0,0)-(2400,2400)
+	width, height := bounds.Dx(), bounds.Dy()
+
+	cols, rows :=  width / composite.TileWidth,  height / composite.TileHeight
+
+	tileCount := cols * rows
 
 
 	fmt.Printf( "composite %dx%d (cols x rows) - %d tiles - %dx%d (width x height) \n",
-									 cols, rows, tile_count, composite.TileWidth, composite.TileHeight )
-	fmt.Println()
-
+									 cols, rows, tileCount, composite.TileWidth, composite.TileHeight )
 
 	y, x := divmod( id, cols )
-	fmt.Printf( "  #%d - tile @ x/y %d/%d... ", id, x, y )
+	fmt.Printf( "  #%d - tile @ x/y %d/%d\n", id, x, y )
 
 	//
 	// todo/fix: change to newNRGBA (better match for png - why? why not?)
 	tile := image.NewRGBA( image.Rect(0,0, composite.TileWidth, composite.TileHeight) )
 
-	if background != nil {
-	  /// use Image.ZP for image.Point{0,0} - why? why not?
-		draw.Draw( tile, tile.Bounds(), &image.Uniform{ background }, image.Point{0,0}, draw.Src )
-	}
-
 	 // sp (starting point) in composite
-	 sp    := image.Point{ x*composite.TileWidth, y*composite.TileHeight }
+	 sp  := image.Point{ x*composite.TileWidth, y*composite.TileHeight }
 	 draw.Draw( tile, tile.Bounds(), composite, sp, draw.Over )
 
 	return &ImageTile{ Image: tile }
@@ -71,8 +79,24 @@ func (composite *ImageComposite) Tile( id int, background color.Color ) *ImageTi
 
 
 
+
 ////////////////////////////////
 // tile methods  "convenience helpers" for easy chaining
+
+func (tile *ImageTile) Background( background color.Color ) *ImageTile {
+
+	// todo/fix: change to newNRGBA (better match for png - why? why not?)
+	width, height := tile.Bounds().Dx(), tile.Bounds().Dy()
+	img := image.NewRGBA( image.Rect(0,0, width, height) )
+
+	/// use Image.ZP for image.Point{0,0} - why? why not?
+	draw.Draw( img, img.Bounds(), &image.Uniform{ background }, image.Point{0,0}, draw.Src )
+	draw.Draw( img, img.Bounds(), tile, image.Point{0,0}, draw.Over )
+
+	return &ImageTile{ Image: img }
+}
+
+
 
 func (tile *ImageTile) Zoom( zoom int ) *ImageTile {
     img, _ := ZoomImage( tile.Image, zoom )
@@ -83,6 +107,8 @@ func (tile *ImageTile) Mirror() *ImageTile {
 	img, _ := MirrorImage( tile.Image )
 	return &ImageTile{ Image: img }
 }
+
+
 
 
 func (tile *ImageTile) Save( path string ) {

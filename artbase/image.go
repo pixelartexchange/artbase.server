@@ -31,7 +31,11 @@ func (col *Collection) HandleTilePNG( id int,
 										                opts PNGOpts )  []byte  {
 
 
-  tile := col.Image().Tile( id, opts.Background )  // no background (color) - use nil
+  tile := col.Image().Tile( id )
+
+	if opts.Background != nil {
+    tile = tile.Background( opts.Background )
+	}
 
 	if opts.Mirror {
 		tile = tile.Mirror()
@@ -106,7 +110,7 @@ type SVGOpts struct  {
 func (col *Collection) HandleTileSVG( id int,
 														          opts SVGOpts )  []byte  {
 
-  tile := col.Image().Tile( id, nil )
+  tile := col.Image().Tile( id )
 
 	if opts.Mirror {
 		tile = tile.Mirror()
