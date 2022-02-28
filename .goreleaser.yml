@@ -31,4 +31,4 @@ builds:
   - freebsd_amd64
   - linux_amd64
   - windows_amd64
-  - darwin_arm64
+  # - darwin_arm64    - note: arm64 not working for now; sorry
