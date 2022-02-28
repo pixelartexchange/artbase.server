@@ -59,7 +59,7 @@ func (col *Collection) Image() *pixelart.ImageComposite  {
 	   img = Cache[ name ]
   } else {
 	   fmt.Println( "    [artbase-cache] adding composite image to in-memory cache...\n" )
-	   img = pixelart.ReadImagePNG( path )
+	   img = pixelart.ReadImage( path )
 	   Cache[ name ] = img
   }
 

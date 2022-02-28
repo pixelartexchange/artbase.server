@@ -3,11 +3,7 @@ package pixelart
 import (
 	"fmt"
 	"image"
-	"image/color"
 	"image/draw"
-	"image/png"
-	"os"
-	"log"
 )
 
 
@@ -32,9 +28,16 @@ func divmod(numerator, denominator int) (quotient, remainder int) {
 }
 
 
+func ReadImageComposite( path string, tileSize *image.Point ) *ImageComposite {
+	img := ReadImage( path )
+
+	return &ImageComposite{ Image: img,
+		                      TileWidth:  tileSize.X,
+		                      TileHeight: tileSize.Y }
+}
 
 
-func (composite *ImageComposite) MaxTileCount() int {
+func (composite *ImageComposite) Max() int {
   // change to TileCountMax or TileCap(acity) or such - why? why not?
 	//   note: not all tiles might be "filled-up / in-use / painted"
 	//    passed in .Count   should be the real / actual count
@@ -77,51 +80,4 @@ func (composite *ImageComposite) Tile( id int ) *ImageTile {
 	return &ImageTile{ Image: tile }
 }
 
-
-
-
-////////////////////////////////
-// tile methods  "convenience helpers" for easy chaining
-
-func (tile *ImageTile) Background( background color.Color ) *ImageTile {
-
-	// todo/fix: change to newNRGBA (better match for png - why? why not?)
-	width, height := tile.Bounds().Dx(), tile.Bounds().Dy()
-	img := image.NewRGBA( image.Rect(0,0, width, height) )
-
-	/// use Image.ZP for image.Point{0,0} - why? why not?
-	draw.Draw( img, img.Bounds(), &image.Uniform{ background }, image.Point{0,0}, draw.Src )
-	draw.Draw( img, img.Bounds(), tile, image.Point{0,0}, draw.Over )
-
-	return &ImageTile{ Image: img }
-}
-
-
-
-func (tile *ImageTile) Zoom( zoom int ) *ImageTile {
-    img, _ := ZoomImage( tile.Image, zoom )
-		return &ImageTile{ Image: img }
-}
-
-func (tile *ImageTile) Mirror() *ImageTile {
-	img, _ := MirrorImage( tile.Image )
-	return &ImageTile{ Image: img }
-}
-
-
-
-
-func (tile *ImageTile) Save( path string ) {
-
-	fmt.Printf( "  saving image to >%s<...\n", path )
-
-  // todo/check - auto-create directories in path - why? why not?
-	fout, err := os.Create( path )
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer fout.Close()
-
-	png.Encode( fout, tile )
-}
 

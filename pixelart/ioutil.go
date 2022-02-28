@@ -13,7 +13,7 @@ import (
 
 
 
-func ReadImagePNG( path string ) image.Image  {
+func ReadImage( path string ) image.Image  {
 	fmt.Printf( "==> reading %s...\n", path )
 
 	f, err := os.Open( path )

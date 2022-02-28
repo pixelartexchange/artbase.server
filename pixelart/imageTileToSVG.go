@@ -89,7 +89,7 @@ func imageColors( img image.Image ) map[string]*ColorInfo  {
 
 
 
-func ImageToSVG( img image.Image ) string  {
+func (tile *ImageTile) ToSVG() string  {
 
 		/////
 		// type NRGBA
@@ -117,13 +117,13 @@ func ImageToSVG( img image.Image ) string  {
 		//   style="background: red;">
 
 
-		colors := imageColors( img )
+		colors := imageColors( tile )
 
 		fmt.Println( "colors:" )
 		fmt.Println( colors )
 
 
-		bounds        := img.Bounds()
+		bounds        := tile.Bounds()
 		width, height := bounds.Dx(), bounds.Dy()
 
 
@@ -153,7 +153,7 @@ func ImageToSVG( img image.Image ) string  {
 				// pixel, ok := img.At( bounds.Min.X+x, bounds.Min.Y+y ).(image.NRGBA)
 				// r, g, b, a := pixel.R, pixel.G, pixel.B, pixel.A
 				pixel := color.NRGBAModel.Convert(
-					            img.At( bounds.Min.X+x, bounds.Min.Y+y )).(color.NRGBA)
+					            tile.At( bounds.Min.X+x, bounds.Min.Y+y )).(color.NRGBA)
 
 
 					if pixel == transparent {
@@ -170,12 +170,3 @@ func ImageToSVG( img image.Image ) string  {
 
 		return buf.String()
 }
-
-
-
-
-
-
-
-
-

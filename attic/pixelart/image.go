@@ -1,10 +1,3 @@
-package pixelart
-
-import (
-	"fmt"
-	"image"
-)
-
 
 
 
@@ -62,6 +55,4 @@ func MirrorImage(img image.Image) (*image.RGBA, error) {
 
 	return new_img, nil
 }
-
-
 
