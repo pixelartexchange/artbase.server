@@ -32,3 +32,13 @@ builds:
   - linux_amd64
   - windows_amd64
   # - darwin_arm64    - note: arm64 not working for now; sorry
+
+
+
+archives:
+- 
+
+  # Can be used to change the archive formats for specific GOOS.
+  format_overrides:
+  - goos: windows
+    format: zip
