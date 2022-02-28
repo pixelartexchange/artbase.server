@@ -4,9 +4,9 @@
 
 ## Download Binaries For Easy "Xcopy" Installation
 
-Find the archives to download for the zero-config ready-to-run xcopy binaries for Windows, Linux and Friends at the [**Releases Page »**](https://github.com/pixelartexchange/artbase.server/releases).
+Find the archives to download  - about 3 Megabytes (MB) - for Windows, Linux and Friends at the [**Releases Page »**](https://github.com/pixelartexchange/artbase.server/releases).
 
-Unpack the archive (e.g. `artbase-*.tar.gz` or `artbase-*.zip`) and than start / run:
+Unpack the archive (e.g. `artbase-*.tar.gz` or `artbase-*.zip`) and than start / run the binary:
 
 ```
 $ artbase
