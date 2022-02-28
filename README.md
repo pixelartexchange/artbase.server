@@ -4,7 +4,7 @@
 
 ## Download Binaries For Easy "Xcopy" Installation
 
-Find the zero-config ready-to-run xcopy binaries for Windows, Linux and Friends at the [**Releases Page »]**](https://github.com/pixelartexchange/artbase.server/releases).
+Find the zero-config ready-to-run xcopy binaries for Windows, Linux and Friends at the [**Releases Page »**](https://github.com/pixelartexchange/artbase.server/releases).
 
 Unpack the archive (e.g. `artbase-*.tar.gz`) and than start / run:
 
