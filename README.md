@@ -1,5 +1,18 @@
-# artbase - zero-config web server / services; (auto-)downloads & serves pre-configured pixel art collections "out-of-the-box"; incl. 2x/4x/8x zoom for bigger image sizes and more; xcopy binaries for easy installation
+# artbase - zero-config web server / services; (auto-)downloads & serves pre-configured pixel art collections "out-of-the-box"; incl. 2x/4x/8x zoom for bigger image sizes and more; windows, linux & friends binaries for easy "xcopy" installation
 
+
+
+## Download Binaries For Easy "Xcopy" Installation
+
+Find the zero-config ready-to-run xcopy binaries for Windows, Linux and Friends at the [**Releases Page »]**](https://github.com/pixelartexchange/artbase.server/releases).
+
+Unpack the archive (e.g. `artbase-*.tar.gz`) and than start / run:
+
+```
+$ artbase
+```
+
+This will start-up a (web) server (listening on port 8080). To test open up `http://localhost:8080` in your browser (to get the index web page listing all collections).
 
 
 ## Build & Run From Source
