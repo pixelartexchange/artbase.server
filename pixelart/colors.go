@@ -168,6 +168,9 @@ var ColorMap = map[string]color.RGBA{
 
 
 func ParseColor(s string) (color.RGBA, error) {
+
+  // todo - add (auto-)downcase for s
+
 	// try color map with known color names first
 	if color, ok := ColorMap[ s ]; ok {
     return color, nil
@@ -180,6 +183,10 @@ func ParseColor(s string) (color.RGBA, error) {
 
 func ParseHexColor(s string) (c color.RGBA, err error) {
 	c.A = 0xff
+
+  if s[0] == '#' {    /// cut-off optional leading # hexstring marker
+     s = s[1:]
+	}
 
 	switch len(s) {
 	case 6:

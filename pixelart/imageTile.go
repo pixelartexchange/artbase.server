@@ -14,7 +14,26 @@ import (
 ////////////////////////////////
 // tile methods  "convenience helpers" for easy chaining
 
-func (tile *ImageTile) Background( background color.Color ) *ImageTile {
+
+
+// todo - find a better name - ensureColor/safeColor or ? - why? why not?
+func MakeColor( a interface{} ) color.Color {
+	var c color.Color
+	switch a := a.(type) {
+	  case color.Color:
+		  c = a
+		case string:
+			c, _ = ParseColor( a )
+	  default:
+			log.Fatal( "[MakeColor] unexpected type %T: %v", a, a )
+  }
+  return c
+}
+
+
+func (tile *ImageTile) Background( background_any interface{} ) *ImageTile {
+
+   background := MakeColor( background_any )
 
 	// todo/fix: change to newNRGBA (better match for png - why? why not?)
 	width, height := tile.Bounds().Dx(), tile.Bounds().Dy()
