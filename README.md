@@ -1,4 +1,4 @@
-# artbase - zero-config web server / services; (auto-)downloads & serves pre-configured pixel art collections "out-of-the-box"; incl. 2x/4x/8x zoom for bigger image sizes and more; binaries for easy "xcopy" installation for windows, linux & friends 
+# artbase - zero-config web server / services; (auto-)downloads & serves pre-configured pixel art collections "out-of-the-box"; incl. 2x/4x/8x zoom for bigger image sizes and more; binaries for easy "xcopy" installation for windows, linux & friends
 
 
 
@@ -172,6 +172,43 @@ in red/green/blue (rgb) hexcode `#60a4f7`:
 ![](i/punks-000001_(v3).png)
 ![](i/punks-000002_(v3).png)
 
+
+
+
+#### silhouette Parameter    (.png only)
+
+Let's try a black silhouette.
+Use the silhouette parameter:
+
+`/punks/0?silhouette=black`, `/punks/1?silhouette=black`, `/punks/2?silhouette=black`, ...
+
+![](i/punks-000000_silhouette(black).png)
+![](i/punks-000001_silhouette(black).png)
+![](i/punks-000002_silhouette(black).png)
+
+
+
+#### Bonus -  Glory to Ukraine! Fuck (Vladimir) Putin! Stop the War! - Send A Stop The War Message To The World With Your Profile Picture
+
+
+Let's try two-colored with the background in blue
+and the silhouette (foreground) in yellow:
+
+`/punks/0?bg=ukraineblue&silhouette=ukraineyellow`, `/punks/1?bg=ukraineblue&silhouette=ukraineyellow`, `/punks/2?bg=ukraineblue&silhouette=ukraineyellow`, ...
+
+![](i/punks-000000_(ukraineblue)_silhouette(ukraineyellow).png)
+![](i/punks-000001_(ukraineblue)_silhouette(ukraineyellow).png)
+![](i/punks-000002_(ukraineblue)_silhouette(ukraineyellow).png)
+
+
+
+Let's try the ukraine flag in the background:
+
+`/punks/0?flag=ukraine`, `/punks/1?flag=ukraine`, `/punks/2?flag=ukraine`, ...
+
+![](i/punks-000000_flag(ukraine).png)
+![](i/punks-000001_flag(ukraine).png)
+![](i/punks-000002_flag(ukraine).png)
 
 
 

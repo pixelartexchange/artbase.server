@@ -166,7 +166,7 @@ func QueryInt( req *http.Request, name string ) (int,bool) {
 
 	query, ok := Query( req, name )
   if ok {
-		value, err = strconv.Atoi( query )
+		value, err = strconv.Atoi( query )  // same as ParseInt( _, 10, 0 ) ??
     if err != nil {
 			log.Panic( err )
 		}
@@ -176,14 +176,15 @@ func QueryInt( req *http.Request, name string ) (int,bool) {
 
 func QueryBool( req *http.Request, name string ) (bool,bool) {
 	value := false   // default default_value to false for now - why? why not?
+  var err error
 
 	query, ok := Query( req, name )
 	if ok {
-		if query == "1" || query[0] == 't' || query[0] == 'y'  {
-			value  = true
+		value, err = strconv.ParseBool( query )
+		// note: supports  0/1, f/t, F/T, False/True, FALSE/TRUE
+    if err != nil {
+			log.Panic( err )
 		}
-	  // note: for now assume everything else is false
-		//    e.g. 0, f(alse), n(o), etc.
 	}
   return value, ok
 }

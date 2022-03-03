@@ -161,9 +161,16 @@ var ColorMap = map[string]color.RGBA{
 
 	// our own custom colors
   // todo - use add alias punksv2, punksv3 - why? why not?
+	"v1":              color.RGBA{0xa7, 0x9a, 0xff, 0xff},
 	"v2":              color.RGBA{0x63, 0x85, 0x96, 0xff},   // larva gray #638596?
 	"v3":              color.RGBA{0x60, 0xa4, 0xf7, 0xff},   // baby blue  #60A4F7
-	// todo: add v1,v4 - any others?
+	"v4":              color.RGBA{0x9b, 0x59, 0xb6, 0xff},
+	// todo: add v2.1, v5 etc. - any others?
+
+  // more custom colors
+	//   ukraine flag   - add aliases e.g. uablue/uayellow - why? why not?
+	"ukraineblue":    color.RGBA{0x00, 0x57, 0xb7, 0xff},  // rgb( 0, 87, 183 )
+	"ukraineyellow":  color.RGBA{0xff, 0xdd, 0x00, 0xff},  // rgb( 255, 221, 0)
 }
 
 

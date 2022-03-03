@@ -21,9 +21,12 @@ import (
 type PNGOpts struct {
 	 Background color.Color  // default: nil
 	 BackgroundName string   // default: ""
+   Silhouette color.Color  // default: nil
+   SilhouetteName string   // default: ""
 	 Mirror bool             // default: false
 	 Zoom int                // default: FIX??? use 1 NOT 0 - how?
 	 Save bool                // default: false
+	 Flag string              // default: ""
 }
 
 
@@ -33,6 +36,11 @@ func (col *Collection) HandleTilePNG( id int,
 
   tile := col.Image().Tile( id )
 
+  if opts.Silhouette != nil {
+    tile = tile.Silhouette( opts.Silhouette )
+	}
+
+
 	if opts.Background != nil {
     tile = tile.Background( opts.Background )
 	}
@@ -40,6 +48,15 @@ func (col *Collection) HandleTilePNG( id int,
 	if opts.Mirror {
 		tile = tile.Mirror()
 	}
+
+
+  if opts.Flag == "ua" ||
+	   opts.Flag == "ukraine" ||
+		 opts.Flag == "glorytoukraine" {
+    tile = tile.Ukraine()
+		// todo/fix: report unsupported flags - why? why not?
+	}
+
 
   if opts.Zoom > 1 {
 		fmt.Printf( " %dx zooming...\n", opts.Zoom )
@@ -61,6 +78,12 @@ func (col *Collection) HandleTilePNG( id int,
 		if opts.Background != nil {
 			 basename = fmt.Sprintf( "%s_(%s)", basename, opts.BackgroundName )
 		}
+		if opts.Silhouette != nil {
+			basename = fmt.Sprintf( "%s_silhouette(%s)", basename, opts.SilhouetteName )
+	 }
+	 if opts.Flag != "" {
+		  basename = fmt.Sprintf( "%s_flag(%s)", basename, opts.Flag )
+    }
 
 		outpath := fmt.Sprintf( "./%s.png", basename )
 

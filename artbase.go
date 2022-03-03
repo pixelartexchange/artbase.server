@@ -58,6 +58,26 @@ func handleCollectionImagePNG( col artbase.Collection ) http.HandlerFunc  {
 		 opts.BackgroundName = backgroundQuery
 	}
 
+
+	silhouetteQuery, ok := router.Query( req, "silhouette" )
+	if ok {
+		 log.Printf( "=> parsing silhouette (forground) color (in hex) >%s<...\n", silhouetteQuery )
+
+     silhouette, err := pixelart.ParseColor( silhouetteQuery )
+     if err != nil {
+			 log.Panic( err )
+		 }
+
+		 opts.Silhouette     = silhouette
+		 opts.SilhouetteName = silhouetteQuery
+	}
+
+	flag, ok := router.Query( req, "flag" )
+	if ok {
+		 opts.Flag = flag
+	}
+
+
 	mirror, ok := router.QueryBool( req,  "mirror" )
 	if !ok {
 		mirror, ok = router.QueryBool( req,  "m" )  // allow shortcut m too

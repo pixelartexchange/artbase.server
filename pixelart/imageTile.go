@@ -47,6 +47,64 @@ func (tile *ImageTile) Background( background_any interface{} ) *ImageTile {
 }
 
 
+// draw flag of ukraine -- glory to ukraine! fuck (vladimir) putin! stop the war!
+func (tile *ImageTile) Ukraine() *ImageTile {
+
+	blue   := color.RGBA{0x00, 0x57, 0xb7, 0xff}  // rgb( 0, 87, 183 )
+	yellow := color.RGBA{0xff, 0xdd, 0x00, 0xff}  // rgb( 255, 221, 0)
+
+ // todo/fix: change to newNRGBA (better match for png - why? why not?)
+ width, height := tile.Bounds().Dx(), tile.Bounds().Dy()
+ img := image.NewRGBA( image.Rect(0,0, width, height) )
+
+ /// use Image.ZP for image.Point{0,0} - why? why not?
+ draw.Draw( img, image.Rect( 0,0,width, height/2 ),
+	               &image.Uniform{ blue }, image.Point{0,0}, draw.Src )
+ draw.Draw( img, image.Rect( 0,height/2,width,height ),
+								 &image.Uniform{ yellow }, image.Point{0,0}, draw.Src )
+
+ draw.Draw( img, img.Bounds(), tile, image.Point{0,0}, draw.Over )
+
+ return &ImageTile{ Image: img }
+}
+
+
+
+func (tile *ImageTile) Silhouette( foreground_any interface{} ) *ImageTile {
+
+	foreground := MakeColor( foreground_any )
+
+	transparent := color.NRGBA{ R: 0,
+                           		G: 0,
+		                          B: 0,
+		                          A: 0 }
+
+ // todo/fix: change to newNRGBA (better match for png - why? why not?)
+ bounds        := tile.Bounds()
+ width, height := bounds.Dx(), bounds.Dy()
+ img := image.NewRGBA( image.Rect(0,0, width, height) )
+
+ for y := 0; y < height; y++ {
+	for x := 0; x < width; x++ {
+		pixel := color.NRGBAModel.Convert( tile.At( bounds.Min.X+x,
+			                                          bounds.Min.Y+y )).(color.NRGBA)
+
+	  if pixel == transparent {
+		   img.Set( bounds.Min.X+x,
+				        bounds.Min.Y+y,
+							  pixel )
+		}  else {
+		    img.Set( bounds.Min.X+x,
+					       bounds.Min.Y+y,
+								 foreground )
+		}
+	}
+}
+
+ return &ImageTile{ Image: img }
+}
+
+
 func (tile *ImageTile) Zoom( zoom int ) *ImageTile {
 			bounds := tile.Bounds()
 			width, height := bounds.Dx(), bounds.Dy()  // note: same as bounds.Max.X-bounds.Min.X, bounds.Max.Y-bounds.Min.Y
