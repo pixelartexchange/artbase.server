@@ -11,6 +11,17 @@ import (
 )
 
 
+
+func min(a, b int) int {
+	if a < b {
+			return a
+	} else {
+	    return b
+  }
+}
+
+
+
 ////////////////////////////////
 // tile methods  "convenience helpers" for easy chaining
 
@@ -121,24 +132,80 @@ func (tile *ImageTile) Transparent() *ImageTile {
  width, height := bounds.Dx(), bounds.Dy()
  img := image.NewRGBA( image.Rect(0,0, width, height) )
 
-	for x := 0; x < width; x++ {
-		for y := 0; y < height; y++ {
-			pixel := tile.At( bounds.Min.X+x,
+
+ ///
+ //   todo/fix:
+ //     change to "fill" algo for now!!!
+ //       if algo hits a non-background color it stops
+
+ for x := 0; x < width; x++ {
+ 	for y := 0; y < height; y++ {
+				pixel := tile.At( bounds.Min.X+x,
 			                  bounds.Min.Y+y )
 
-	  if pixel == background {
-		   img.Set( bounds.Min.X+x,
-				        bounds.Min.Y+y,
-							  transparent )
-		}  else {
-		    img.Set( bounds.Min.X+x,
-					       bounds.Min.Y+y,
-								 pixel )
+	         if pixel == background {
+		        img.Set( bounds.Min.X+x,
+      				        bounds.Min.Y+y,
+			      				  transparent )
+					} else {
+		        img.Set( bounds.Min.X+x,
+						         bounds.Min.Y+y,
+							       pixel )
+				 }
 		}
 	}
-}
+
 
  return &ImageTile{ Image: img }
+}
+
+
+
+func (tile *ImageTile) Circle() *ImageTile {
+
+	 bounds := tile.Bounds()
+   width, height := bounds.Dx(), bounds.Dy()
+
+	 // for radius use min of width / height
+	 r := min( width, height ) / 2
+
+   center_x := width  / 2
+	 center_y := height / 2
+
+   ////////
+	 //  try with 96x96
+	 //    center_x:  96 / 2 = 48
+	 //    center_y:  96 / 2 = 48
+   //
+	 //     r:    96 / 2 = 48
+
+
+	 // use color.Alpha{0} - why? why not?
+	 transparent := color.NRGBA{ R: 0,
+                            	 G: 0,
+	                             B: 0,
+	                             A: 0 }
+
+   // todo/fix: change to newNRGBA (better match for png - why? why not?)
+   img := image.NewRGBA( image.Rect(0,0, width, height) )
+
+	 for x := 0; x < width; x++ {
+     for y := 0; y < height; y++ {
+         pixel := tile.At( bounds.Min.X+x,
+										       bounds.Min.Y+y )
+
+		xx, yy, rr := float64( x - center_x )+0.5,
+		              float64( y - center_y )+0.5,
+									float64( r )
+
+						if xx*xx+yy*yy < rr*rr {
+							img.Set(x, y, pixel )
+						} else {
+							img.Set( x,y, transparent )
+						}
+					}
+		}
+  	return &ImageTile{ Image: img }
 }
 
 

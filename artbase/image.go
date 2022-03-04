@@ -23,6 +23,7 @@ type PNGOpts struct {
 	 BackgroundName string   // default: ""
    Silhouette color.Color  // default: nil
    SilhouetteName string   // default: ""
+	 Circle bool             // default: false
 	 Mirror bool             // default: false
 	 Transparent bool        // default: false
 	 Zoom int                // default: FIX??? use 1 NOT 0 - how?
@@ -70,6 +71,12 @@ func (col *Collection) HandleTilePNG( id int,
 	}
 
 
+	if opts.Circle {
+		tile = tile.Circle()
+	}
+
+
+
 	name := col.Name
 
 	if opts.Save {
@@ -80,6 +87,9 @@ func (col *Collection) HandleTilePNG( id int,
 		}
     if opts.Mirror {
 			basename = fmt.Sprintf( "%s_mirror", basename )
+		}
+    if opts.Circle {
+			basename = fmt.Sprintf( "%s_circle", basename )
 		}
 		if opts.Background != nil {
 			 basename = fmt.Sprintf( "%s_(%s)", basename, opts.BackgroundName )

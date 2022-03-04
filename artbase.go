@@ -93,6 +93,10 @@ func handleCollectionImagePNG( col artbase.Collection ) http.HandlerFunc  {
 	}
 
 
+	circle, ok := router.QueryBool( req,  "circle" )
+  if circle {
+		opts.Circle = true
+	}
 
 
 	zoom, ok := router.QueryInt( req,  "zoom" )

@@ -53,10 +53,10 @@ func Mutex( name string ) *sync.Mutex {
 		 lock = &sync.Mutex{}
 		 mutex[ name ] = lock
 
-		 fmt.Printf( "  adding new mutex for %s - %v\n", name, lock )
+		 fmt.Printf( "  adding new mutex for %s - %v @ %p\n", name, lock, lock )
 	}
 
-  fmt.Printf( "  use mutex for %s - %v\n", name, lock )
+  fmt.Printf( "  use mutex for %s - %v @ %p\n", name, lock, lock )
 
 	return lock
 }
