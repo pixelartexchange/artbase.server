@@ -87,6 +87,13 @@ func handleCollectionImagePNG( col artbase.Collection ) http.HandlerFunc  {
 		opts.Mirror = true
 	}
 
+	transparent, ok := router.QueryBool( req,  "transparent" )
+  if transparent {
+		opts.Transparent = true
+	}
+
+
+
 
 	zoom, ok := router.QueryInt( req,  "zoom" )
 	if !ok {

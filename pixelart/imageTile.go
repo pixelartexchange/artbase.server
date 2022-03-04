@@ -105,6 +105,44 @@ func (tile *ImageTile) Silhouette( foreground_any interface{} ) *ImageTile {
 }
 
 
+
+func (tile *ImageTile) Transparent() *ImageTile {
+
+	bounds      := tile.Bounds()
+	background := tile.At( bounds.Min.X,
+		                     bounds.Min.Y ) // 0,0
+
+  transparent := color.NRGBA{ R: 0,
+														  G: 0,
+													    B: 0,
+													    A: 0 }
+
+ // todo/fix: change to newNRGBA (better match for png - why? why not?)
+ width, height := bounds.Dx(), bounds.Dy()
+ img := image.NewRGBA( image.Rect(0,0, width, height) )
+
+	for x := 0; x < width; x++ {
+		for y := 0; y < height; y++ {
+			pixel := tile.At( bounds.Min.X+x,
+			                  bounds.Min.Y+y )
+
+	  if pixel == background {
+		   img.Set( bounds.Min.X+x,
+				        bounds.Min.Y+y,
+							  transparent )
+		}  else {
+		    img.Set( bounds.Min.X+x,
+					       bounds.Min.Y+y,
+								 pixel )
+		}
+	}
+}
+
+ return &ImageTile{ Image: img }
+}
+
+
+
 func (tile *ImageTile) Zoom( zoom int ) *ImageTile {
 			bounds := tile.Bounds()
 			width, height := bounds.Dx(), bounds.Dy()  // note: same as bounds.Max.X-bounds.Min.X, bounds.Max.Y-bounds.Min.Y

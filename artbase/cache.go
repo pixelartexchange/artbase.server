@@ -31,17 +31,41 @@ func fileExist(name string) (bool, error) {
 var Cache = make( map[string]image.Image )
 
 
+
 ///
 //  note: for now use one lock
 //             per collection id (that is, name)
-var mutex = make( map[string]sync.Mutex )
+//   note: default (zero-value) sync might not be work??
+//            try with explicit init via pointer
+var mutex_lock sync.Mutex
+var mutex = make( map[string]*sync.Mutex )
 
+func Mutex( name string ) *sync.Mutex {
+	// for "security" use another mutext for the mutex map access
+	mutex_lock.Lock()
+	defer mutex_lock.Unlock()
+
+	var lock *sync.Mutex
+	var ok bool
+
+	if lock, ok = mutex[ name ]; !ok {
+	   // first time mutex usage / init
+		 lock = &sync.Mutex{}
+		 mutex[ name ] = lock
+
+		 fmt.Printf( "  adding new mutex for %s - %v\n", name, lock )
+	}
+
+  fmt.Printf( "  use mutex for %s - %v\n", name, lock )
+
+	return lock
+}
 
 
 func (col *Collection) Image() *pixelart.ImageComposite  {
 	name := col.Name
 
-	lock := mutex[ name ]
+  lock := Mutex( name )
 	lock.Lock()
 	defer lock.Unlock()
 

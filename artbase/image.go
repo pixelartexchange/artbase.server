@@ -24,6 +24,7 @@ type PNGOpts struct {
    Silhouette color.Color  // default: nil
    SilhouetteName string   // default: ""
 	 Mirror bool             // default: false
+	 Transparent bool        // default: false
 	 Zoom int                // default: FIX??? use 1 NOT 0 - how?
 	 Save bool                // default: false
 	 Flag string              // default: ""
@@ -35,6 +36,11 @@ func (col *Collection) HandleTilePNG( id int,
 
 
   tile := col.Image().Tile( id )
+
+
+  if opts.Transparent {
+    tile = tile.Transparent()
+	}
 
   if opts.Silhouette != nil {
     tile = tile.Silhouette( opts.Silhouette )

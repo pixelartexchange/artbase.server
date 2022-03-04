@@ -67,6 +67,11 @@ var Collections = []Collection{
 	 Background: true },
 
 
+	 {Name: "mooncatrescue",  Width: 24, Height: 24,
+	 Path: "./mooncatrescue.png",
+   Url: "https://github.com/cryptocopycats/awesome-mooncatrescue-bubble/raw/master/i/mooncatrescue.png" },
+
+
 	 {Name: "wiener",  Width: 32, Height: 32,
 	 Path: "./wiener.png",
    Url: "https://github.com/pixelartexchange/collections/raw/master/wiener-32x32.png",
