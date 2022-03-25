@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"net/http"
 
 	"github.com/pixelartexchange/artbase.server/artbase"
@@ -196,7 +197,18 @@ func main() {
 		serve.GET( "/" + c.Name + `/(?P<id>[0-9]+)\.svg`,    handleCollectionImageSVG( c ) )
 	}
 
-	http.ListenAndServe( "localhost:8080", &serve )
+
+
+
+	port := os.Getenv( "PORT" )
+
+	if port == "" {
+		log.Fatal( "$PORT must be set" )
+	}
+
+
+  // fix: for windows use  "localhost:8080"
+	http.ListenAndServe( ":" + port, &serve )
 
 	fmt.Println( "Bye!")
 }
