@@ -1,6 +1,12 @@
 # artbase - zero-config web server / services; (auto-)downloads & serves pre-configured pixel art collections "out-of-the-box"; incl. 2x/4x/8x zoom for bigger image sizes and more; binaries for easy "xcopy" installation for windows, linux & friends
 
 
+## Try Online
+
+Try the sample artbase web server / service installation running online
+at [**pixelartexchange.herokuapp.com »**](https://pixelartexchange.herokuapp.com/).
+
+
 
 ## Download Binaries For Easy "Xcopy" Installation
 
@@ -32,6 +38,32 @@ $ artbase
 ```
 
 This will start-up a (web) server (listening on port 8080). To test open up `http://localhost:8080` in your browser (to get the index web page listing all collections).
+
+
+
+## Install & Run Online Using Heroku
+
+Yes, you can. Run your own artbase (web) server / service
+copy online using heroku.
+
+Step 1 - Login to Heroku
+
+```
+$ heroku login
+```
+
+Step 2 - Create a Heroku app(lication)
+
+```
+$ heroku create  [app_name]
+$ git push heroku master
+```
+
+That's it.
+Test your online artbase (web) server / service
+running at `https://[app_name].herokuapp.com`
+
+
 
 
 
