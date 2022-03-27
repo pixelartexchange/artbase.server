@@ -262,6 +262,18 @@ func (tile *ImageTile) Mirror() *ImageTile {
 }
 
 
+
+func (tile *ImageTile) Paste( img image.Image ) {
+	// note - image.Image (is read-only - no Set() method)
+	//          convert/typecast to draw.Image (that includes Set() method)
+  //  see https://stackoverflow.com/questions/36573413/change-color-of-a-single-pixel-golang-image
+
+	draw.Draw( tile.Image.(draw.Image),
+	           img.Bounds(), img, image.Point{0,0}, draw.Over )
+}
+
+
+
 func (tile *ImageTile) Save( path string ) {
 
 	fmt.Printf( "  saving image to >%s<...\n", path )

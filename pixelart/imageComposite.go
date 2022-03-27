@@ -34,6 +34,7 @@ func divmod(numerator, denominator int) (quotient, remainder int) {
 }
 
 
+
 func ReadImageComposite( path string, tileSize *image.Point ) *ImageComposite {
 	img := ReadImage( path )
 
@@ -41,6 +42,19 @@ func ReadImageComposite( path string, tileSize *image.Point ) *ImageComposite {
 		                      TileWidth:  tileSize.X,
 		                      TileHeight: tileSize.Y }
 }
+
+
+func NewImageComposite( cols int, rows int,
+	                      tileSize *image.Point ) *ImageComposite {
+
+  img := image.NewRGBA( image.Rect(0,0, cols*tileSize.X,
+	     								  rows*tileSize.Y) )
+
+  return &ImageComposite{ Image: Image{ img },
+		                      TileWidth:  tileSize.X,
+		                      TileHeight: tileSize.Y }
+}
+
 
 
 func (composite *ImageComposite) Max() int {
@@ -84,6 +98,31 @@ func (composite *ImageComposite) Tile( id int ) *ImageTile {
 	 draw.Draw( tile, tile.Bounds(), composite, sp, draw.Over )
 
 	return &ImageTile{ Image: tile }
+}
+
+
+
+func (composite *ImageComposite) Add( tile image.Image ) {
+	 bounds := composite.Bounds()
+	 width, height := bounds.Dx(), bounds.Dy()
+
+	 cols, rows :=  width / composite.TileWidth,
+	                height / composite.TileHeight
+	 y, x :=  divmod( composite.Count, cols )
+
+   fmt.Printf( "adding tile %d @ x/y %d/%d in (%dx%d)...\n", composite.Count, x, y, cols, rows )
+
+	// sp (starting point) in composite
+	sp  := image.Point{ x*composite.TileWidth, y*composite.TileHeight }
+	 // fmt.Println( sp )
+
+	rect := image.Rect( sp.X, sp.Y,
+		                  sp.X+tile.Bounds().Dx(),
+											sp.Y+tile.Bounds().Dy())
+	draw.Draw( composite.Image.Image.(draw.Image),
+	           rect, tile, image.Point{0,0}, draw.Over )
+
+	composite.Count += 1
 }
 
 
