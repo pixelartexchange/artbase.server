@@ -8,14 +8,20 @@ import (
 
 
 
-type ImageComposite struct {
-	image.Image     // use "composition"
-	TileWidth, TileHeight int
-	Count int     // optional - not all tiles (full cap(acity) might be used)
+type Image struct {
+	image.Image    // use "composition" - for "nicer" api - why? why not?
 }
 
-type ImageTile struct {
-	image.Image    // use "composition" - for "nicer" api - why? why not?
+// check -
+//   change ImageTile to just Image
+//  and add a type ImageTile = Image  alias - why? why not?
+type ImageTile = Image
+
+
+type ImageComposite struct {
+	Image     // use "composition" - note: does NOT use image.Image but our own!!!
+	TileWidth, TileHeight int
+	Count int     // optional - not all tiles (full cap(acity) might be used)
 }
 
 
@@ -31,7 +37,7 @@ func divmod(numerator, denominator int) (quotient, remainder int) {
 func ReadImageComposite( path string, tileSize *image.Point ) *ImageComposite {
 	img := ReadImage( path )
 
-	return &ImageComposite{ Image: img,
+	return &ImageComposite{ Image: Image{ img },
 		                      TileWidth:  tileSize.X,
 		                      TileHeight: tileSize.Y }
 }

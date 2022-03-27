@@ -87,7 +87,7 @@ func (col *Collection) Image() *pixelart.ImageComposite  {
 	   Cache[ name ] = img
   }
 
-	return &pixelart.ImageComposite{ Image: img,
+	return &pixelart.ImageComposite{ Image: pixelart.Image{ img },
 	                                 TileWidth:  col.Width,
 												           TileHeight: col.Height }
 }

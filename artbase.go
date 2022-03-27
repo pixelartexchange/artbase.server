@@ -199,16 +199,20 @@ func main() {
 
 
 
+	// default addr to localhost:8080 for now
+	//    for windows include localhost to avoid firewall warning/popup
+	//       if binding to :8080 only  - why? why not?
 
+  addr := "localhost:8080"
+
+	// check for port in env settings - required by heroku
 	port := os.Getenv( "PORT" )
-
-	if port == "" {
-		log.Fatal( "$PORT must be set" )
+	if port != "" {
+		addr = ":" + port
 	}
 
 
-  // fix: for windows use  "localhost:8080"
-	http.ListenAndServe( ":" + port, &serve )
+ 	http.ListenAndServe( addr, &serve )
 
 	fmt.Println( "Bye!")
 }
