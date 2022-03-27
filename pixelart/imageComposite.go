@@ -7,6 +7,11 @@ import (
 )
 
 
+//
+// for convenience add a type alias for image.Point
+type Point = image.Point
+
+
 
 type Image struct {
 	image.Image    // use "composition" - for "nicer" api - why? why not?
@@ -48,7 +53,7 @@ func NewImageComposite( cols int, rows int,
 	                      tileSize *image.Point ) *ImageComposite {
 
   img := image.NewRGBA( image.Rect(0,0, cols*tileSize.X,
-	     								  rows*tileSize.Y) )
+	     								                  rows*tileSize.Y) )
 
   return &ImageComposite{ Image: Image{ img },
 		                      TileWidth:  tileSize.X,

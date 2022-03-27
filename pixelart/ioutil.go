@@ -7,13 +7,13 @@ import (
 	"io"
 	"os"
   "net/http"
-	"image"
+	// "image"
 	"image/png"
 )
 
 
 
-func ReadImage( path string ) image.Image  {
+func ReadImage( path string ) *ImageTile {
 	fmt.Printf( "==> reading %s...\n", path )
 
 	f, err := os.Open( path )
@@ -31,7 +31,7 @@ func ReadImage( path string ) image.Image  {
 	fmt.Println( bounds )
 	// e.g.   punks.png  (0,0)-(2400,2400)
 
-	return img
+	return &ImageTile{img}
 }
 
 
