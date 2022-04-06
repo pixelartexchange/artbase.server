@@ -42,31 +42,40 @@ func MakeColor( a interface{} ) color.Color {
 }
 
 
-func (tile *ImageTile) Background( background_any interface{} ) *ImageTile {
+
+
+// todo - move to ImageTitle.go file - why? why not?
+func NewImage( width, height int ) *Image {
+  img := image.NewNRGBA( image.Rect( 0,0, width, height ))
+  return &Image{ img }
+}
+
+
+func (tile *Image) Background( background_any interface{} ) *Image {
 
    background := MakeColor( background_any )
 
 	// todo/fix: change to newNRGBA (better match for png - why? why not?)
 	width, height := tile.Bounds().Dx(), tile.Bounds().Dy()
-	img := image.NewRGBA( image.Rect(0,0, width, height) )
+	img := NewImage( width, height )
 
 	/// use Image.ZP for image.Point{0,0} - why? why not?
 	draw.Draw( img, img.Bounds(), &image.Uniform{ background }, image.Point{0,0}, draw.Src )
 	draw.Draw( img, img.Bounds(), tile, image.Point{0,0}, draw.Over )
 
-	return &ImageTile{ Image: img }
+	return img
 }
 
 
 // draw flag of ukraine -- glory to ukraine! fuck (vladimir) putin! stop the war!
-func (tile *ImageTile) Ukraine() *ImageTile {
+func (tile *Image) Ukraine() *Image {
 
-	blue   := color.RGBA{0x00, 0x57, 0xb7, 0xff}  // rgb( 0, 87, 183 )
-	yellow := color.RGBA{0xff, 0xdd, 0x00, 0xff}  // rgb( 255, 221, 0)
+	blue   := color.NRGBA{0x00, 0x57, 0xb7, 0xff}  // rgb( 0, 87, 183 )
+	yellow := color.NRGBA{0xff, 0xdd, 0x00, 0xff}  // rgb( 255, 221, 0)
 
  // todo/fix: change to newNRGBA (better match for png - why? why not?)
  width, height := tile.Bounds().Dx(), tile.Bounds().Dy()
- img := image.NewRGBA( image.Rect(0,0, width, height) )
+ img := NewImage( width, height )
 
  /// use Image.ZP for image.Point{0,0} - why? why not?
  draw.Draw( img, image.Rect( 0,0,width, height/2 ),
@@ -76,12 +85,12 @@ func (tile *ImageTile) Ukraine() *ImageTile {
 
  draw.Draw( img, img.Bounds(), tile, image.Point{0,0}, draw.Over )
 
- return &ImageTile{ Image: img }
+ return img
 }
 
 
 
-func (tile *ImageTile) Silhouette( foreground_any interface{} ) *ImageTile {
+func (tile *Image) Silhouette( foreground_any interface{} ) *Image {
 
 	foreground := MakeColor( foreground_any )
 
@@ -90,10 +99,9 @@ func (tile *ImageTile) Silhouette( foreground_any interface{} ) *ImageTile {
 		                          B: 0,
 		                          A: 0 }
 
- // todo/fix: change to newNRGBA (better match for png - why? why not?)
  bounds        := tile.Bounds()
  width, height := bounds.Dx(), bounds.Dy()
- img := image.NewRGBA( image.Rect(0,0, width, height) )
+ img := NewImage( width, height )
 
  for y := 0; y < height; y++ {
 	for x := 0; x < width; x++ {
@@ -112,12 +120,12 @@ func (tile *ImageTile) Silhouette( foreground_any interface{} ) *ImageTile {
 	}
 }
 
- return &ImageTile{ Image: img }
+ return img
 }
 
 
 
-func (tile *ImageTile) Transparent() *ImageTile {
+func (tile *Image) Transparent() *Image {
 
 	bounds      := tile.Bounds()
 	background := tile.At( bounds.Min.X,
@@ -128,10 +136,8 @@ func (tile *ImageTile) Transparent() *ImageTile {
 													    B: 0,
 													    A: 0 }
 
- // todo/fix: change to newNRGBA (better match for png - why? why not?)
  width, height := bounds.Dx(), bounds.Dy()
- img := image.NewRGBA( image.Rect(0,0, width, height) )
-
+ img := NewImage( width, height )
 
  ///
  //   todo/fix:
@@ -155,13 +161,12 @@ func (tile *ImageTile) Transparent() *ImageTile {
 		}
 	}
 
-
- return &ImageTile{ Image: img }
+ return img
 }
 
 
 
-func (tile *ImageTile) Circle() *ImageTile {
+func (tile *Image) Circle() *Image {
 
 	 bounds := tile.Bounds()
    width, height := bounds.Dx(), bounds.Dy()
@@ -186,8 +191,7 @@ func (tile *ImageTile) Circle() *ImageTile {
 	                             B: 0,
 	                             A: 0 }
 
-   // todo/fix: change to newNRGBA (better match for png - why? why not?)
-   img := image.NewRGBA( image.Rect(0,0, width, height) )
+   img := NewImage( width, height )
 
 	 for x := 0; x < width; x++ {
      for y := 0; y < height; y++ {
@@ -205,12 +209,12 @@ func (tile *ImageTile) Circle() *ImageTile {
 						}
 					}
 		}
-  	return &ImageTile{ Image: img }
+  	return img
 }
 
 
 
-func (tile *ImageTile) Zoom( zoom int ) *ImageTile {
+func (tile *Image) Zoom( zoom int ) *Image {
 			bounds := tile.Bounds()
 			width, height := bounds.Dx(), bounds.Dy()  // note: same as bounds.Max.X-bounds.Min.X, bounds.Max.Y-bounds.Min.Y
 
@@ -221,7 +225,7 @@ func (tile *ImageTile) Zoom( zoom int ) *ImageTile {
 			//             #7804 (96,1872)-(120,1896)
 			//             #8857 (1368,2112)-(1392,2136)
 
-			img := image.NewRGBA( image.Rect(0,0, width*zoom, height*zoom) )
+			img := NewImage( width*zoom, height*zoom )
 
 			for x:=0; x < width; x++ {
 				for y:=0; y < height; y++ {
@@ -234,11 +238,11 @@ func (tile *ImageTile) Zoom( zoom int ) *ImageTile {
 			 }
 		}
 
-		return &ImageTile{ Image: img }
+		return img
 }
 
 
-func (tile *ImageTile) Mirror() *ImageTile {
+func (tile *Image) Mirror() *Image {
 		bounds := tile.Bounds()
 		width, height := bounds.Dx(), bounds.Dy()  // bounds.Max.X-bounds.Min.X, bounds.Max.Y-bounds.Min.Y
 
@@ -249,7 +253,7 @@ func (tile *ImageTile) Mirror() *ImageTile {
 		//             #7804 (96,1872)-(120,1896)
 		//             #8857 (1368,2112)-(1392,2136)
 
-		img := image.NewRGBA( image.Rect(0,0, width, height) )
+		img := NewImage( width, height )
 
 		for y := 0; y < height; y++ {
 			for x := 0; x < width; x++ {
@@ -258,27 +262,27 @@ func (tile *ImageTile) Mirror() *ImageTile {
 			}
 		}
 
-		return &ImageTile{ Image: img }
+		return img
 }
 
 
 
-func (tile *ImageTile) Paste( img image.Image ) {
+func (tile *Image) Paste( img image.Image ) {
 	// note - image.Image (is read-only - no Set() method)
 	//          convert/typecast to draw.Image (that includes Set() method)
   //  see https://stackoverflow.com/questions/36573413/change-color-of-a-single-pixel-golang-image
 
-	draw.Draw( tile.Image.(draw.Image),
+	draw.Draw( tile,
 	           img.Bounds(), img, image.Point{0,0}, draw.Over )
 }
 
 
 
-func (tile *ImageTile) Save( path string ) {
+func (tile *Image) Save( path string ) {
 
 	fmt.Printf( "  saving image to >%s<...\n", path )
 
-  // todo/check - auto-create directories in path - why? why not?
+  // todo/check/fix!!!! - auto-create directories in path - why? why not?
 	fout, err := os.Create( path )
 	if err != nil {
 		log.Fatal(err)

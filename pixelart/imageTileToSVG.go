@@ -89,7 +89,7 @@ func imageColors( img image.Image ) map[string]*ColorInfo  {
 
 
 
-func (tile *ImageTile) ToSVG() string  {
+func (tile *Image) ToSVG() string  {
 
 		/////
 		// type NRGBA

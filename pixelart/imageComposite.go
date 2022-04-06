@@ -13,14 +13,48 @@ type Point = image.Point
 
 
 
+// note: for now ALWAYS use
+// image of type *image.NRGBA
+//   (32bit RGBA colors, not pre-multiplied by alpha)
+//  internally!!!
+//
+// type NRGBA struct {
+//	Pix []uint8
+//	Stride int
+//	Rect Rectangle
+// }
+
+// note: use "composition" - for "nicer" api - why? why not?
+//    type alias is not working e.g. type Image = image.NRGBA
+//      results in
+//       cannot define new methods on non-local type *image.NRGBA
+//       and such -  can be fixed? why? why not?
+
 type Image struct {
-	image.Image    // use "composition" - for "nicer" api - why? why not?
+	*image.NRGBA    // use "composition" - for "nicer"  api (lets you use like image.Image) - why? why not?
 }
 
-// check -
-//   change ImageTile to just Image
-//  and add a type ImageTile = Image  alias - why? why not?
-type ImageTile = Image
+/*
+ see https://stackoverflow.com/questions/61964247/idiomatic-go-for-handling-any-image-type-with-any-color-type
+     https://stackoverflow.com/questions/47535474/convert-image-from-image-ycbcr-to-image-rgba
+*/
+func ConvertToNRGBA( img image.Image ) *image.NRGBA {
+    var ok bool
+		var nrgba *image.NRGBA
+
+		nrgba, ok = img.(*image.NRGBA)
+    if ok {
+        return nrgba
+    }
+
+    fmt.Printf( "  auto-converting image %v of type %T to *image.NRGBA\n", img.Bounds(), img )
+
+    bounds := img.Bounds()
+    nrgba = image.NewNRGBA( image.Rect(0, 0, bounds.Dx(), bounds.Dy()))
+    draw.Draw( nrgba, nrgba.Bounds(), img, bounds.Min, draw.Src )
+
+    return nrgba
+}
 
 
 type ImageComposite struct {
@@ -43,7 +77,7 @@ func divmod(numerator, denominator int) (quotient, remainder int) {
 func ReadImageComposite( path string, tileSize *image.Point ) *ImageComposite {
 	img := ReadImage( path )
 
-	return &ImageComposite{ Image: Image{ img },
+	return &ImageComposite{ Image: *img,
 		                      TileWidth:  tileSize.X,
 		                      TileHeight: tileSize.Y }
 }
@@ -52,10 +86,9 @@ func ReadImageComposite( path string, tileSize *image.Point ) *ImageComposite {
 func NewImageComposite( cols int, rows int,
 	                      tileSize *image.Point ) *ImageComposite {
 
-  img := image.NewRGBA( image.Rect(0,0, cols*tileSize.X,
-	     								                  rows*tileSize.Y) )
+  img := NewImage( cols*tileSize.X, rows*tileSize.Y)
 
-  return &ImageComposite{ Image: Image{ img },
+  return &ImageComposite{ Image: *img,    // note: use * for dereference - NewImage returns pointer to Image!!
 		                      TileWidth:  tileSize.X,
 		                      TileHeight: tileSize.Y }
 }
@@ -77,7 +110,7 @@ func (composite *ImageComposite) Max() int {
 }
 
 
-func (composite *ImageComposite) Tile( id int ) *ImageTile {
+func (composite *ImageComposite) Tile( id int ) *Image {
 	bounds := composite.Bounds()
 	// fmt.Println( bounds )
 	// e.g.   punks.png  (0,0)-(2400,2400)
@@ -94,15 +127,13 @@ func (composite *ImageComposite) Tile( id int ) *ImageTile {
 	y, x := divmod( id, cols )
 	fmt.Printf( "  #%d - tile @ x/y %d/%d\n", id, x, y )
 
-	//
-	// todo/fix: change to newNRGBA (better match for png - why? why not?)
-	tile := image.NewRGBA( image.Rect(0,0, composite.TileWidth, composite.TileHeight) )
+  tile := NewImage( composite.TileWidth, composite.TileHeight )
 
 	 // sp (starting point) in composite
 	 sp  := image.Point{ x*composite.TileWidth, y*composite.TileHeight }
 	 draw.Draw( tile, tile.Bounds(), composite, sp, draw.Over )
 
-	return &ImageTile{ Image: tile }
+	return tile
 }
 
 
@@ -124,7 +155,7 @@ func (composite *ImageComposite) Add( tile image.Image ) {
 	rect := image.Rect( sp.X, sp.Y,
 		                  sp.X+tile.Bounds().Dx(),
 											sp.Y+tile.Bounds().Dy())
-	draw.Draw( composite.Image.Image.(draw.Image),
+	draw.Draw( composite,
 	           rect, tile, image.Point{0,0}, draw.Over )
 
 	composite.Count += 1

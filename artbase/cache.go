@@ -2,7 +2,6 @@ package artbase
 
 import (
 	"fmt"
-	"image"
 	"os"
 	"errors"
 	"sync"
@@ -28,7 +27,7 @@ func fileExist(name string) (bool, error) {
 //  todo/check -  make (local) cache public - why? why not?
 //                              or just keep as "internal" detail
 //  note: remember map always requires make or map literal to init/setup
-var Cache = make( map[string]image.Image )
+var Cache = make( map[string]*pixelart.Image )
 
 
 
@@ -76,7 +75,7 @@ func (col *Collection) Image() *pixelart.ImageComposite  {
 	  pixelart.Download( col.Url, path )
 	}
 
-	var img image.Image
+	var img *pixelart.Image
 
   if Cache[ name ] != nil {
 	   fmt.Println( "    [artbase-cache] bingo! (re)using in-memory composite image from cache...\n" )
@@ -87,10 +86,8 @@ func (col *Collection) Image() *pixelart.ImageComposite  {
 	   Cache[ name ] = img
   }
 
-	return &pixelart.ImageComposite{ Image: pixelart.Image{ img },
+	return &pixelart.ImageComposite{ Image:      *img,
 	                                 TileWidth:  col.Width,
 												           TileHeight: col.Height }
 }
-
-
 

@@ -13,7 +13,7 @@ import (
 
 
 
-func ReadImage( path string ) *ImageTile {
+func ReadImage( path string ) *Image {
 	fmt.Printf( "==> reading %s...\n", path )
 
 	f, err := os.Open( path )
@@ -31,7 +31,7 @@ func ReadImage( path string ) *ImageTile {
 	fmt.Println( bounds )
 	// e.g.   punks.png  (0,0)-(2400,2400)
 
-	return &ImageTile{img}
+	return &Image{ ConvertToNRGBA( img ) }
 }
 
 
