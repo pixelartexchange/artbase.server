@@ -8,6 +8,7 @@ import (
 	"image/png"
 	"os"
 	"log"
+	"path/filepath"
 )
 
 
@@ -168,49 +169,56 @@ func (tile *Image) Transparent() *Image {
 
 func (tile *Image) Circle() *Image {
 
-	 bounds := tile.Bounds()
-   width, height := bounds.Dx(), bounds.Dy()
+	bounds := tile.Bounds()
+	width, height := bounds.Dx(), bounds.Dy()
 
-	 // for radius use min of width / height
-	 r := min( width, height ) / 2
+	// for radius use min of width / height
+	//   if overflow_x  - center (add padding/overflow left & right)
+	//   if overflow_y  - anchor to bottom
+	min_square := min( width, height )
 
-   center_x := width  / 2
-	 center_y := height / 2
+  overflow_x := width  - min_square
+  overflow_y := height - min_square
 
-   ////////
-	 //  try with 96x96
-	 //    center_x:  96 / 2 = 48
-	 //    center_y:  96 / 2 = 48
-   //
-	 //     r:    96 / 2 = 48
+  fmt.Printf( "   circle %v to %d +%dpx x %d +%dpx overflow\n",
+	                  bounds, min_square, overflow_x,
+										        min_square, overflow_y )
+
+	r      := min_square / 2
+	center := min_square / 2
 
 
-	 // use color.Alpha{0} - why? why not?
-	 transparent := color.NRGBA{ R: 0,
-                            	 G: 0,
-	                             B: 0,
-	                             A: 0 }
+	// use color.Alpha{0} - why? why not?
+	transparent := color.NRGBA{ R: 0,
+															G: 0,
+															B: 0,
+															A: 0 }
 
-   img := NewImage( width, height )
+	img := NewImage( width, height )
 
-	 for x := 0; x < width; x++ {
-     for y := 0; y < height; y++ {
-         pixel := tile.At( bounds.Min.X+x,
-										       bounds.Min.Y+y )
+	for x := 0; x < min_square; x++ {
+		for y := 0; y < min_square; y++ {
+				pixel := tile.At( bounds.Min.X+x+(overflow_x/2),
+													bounds.Min.Y+y+overflow_y )
 
-		xx, yy, rr := float64( x - center_x )+0.5,
-		              float64( y - center_y )+0.5,
-									float64( r )
+	 xx, yy, rr := float64( x - center )+0.5,
+								 float64( y - center )+0.5,
+								 float64( r )
 
-						if xx*xx+yy*yy < rr*rr {
-							img.Set(x, y, pixel )
-						} else {
-							img.Set( x,y, transparent )
-						}
-					}
-		}
-  	return img
+					 if xx*xx+yy*yy < rr*rr {
+						 img.Set( x+(overflow_x/2),
+							        y+overflow_y,
+											pixel )
+					 } else {
+						 img.Set( x+(overflow_x/2),
+							        y+overflow_y,
+											transparent )
+					 }
+				 }
+	 }
+	 return img
 }
+
 
 
 
@@ -277,12 +285,66 @@ func (tile *Image) Paste( img image.Image ) {
 }
 
 
+func (tile *Image) Resize( width int ) *Image {
+  // note: for now resize only width
+	//   note: for now assumes width is always greater than actual width
+	//              todo -assert width is greater (otherwise report error)
+	bounds := tile.Bounds()
+	image_width, image_height := bounds.Dx(), bounds.Dy()  // bounds.Max.X-bounds.Min.X, bounds.Max.Y-bounds.Min.Y
+
+  zoom_x, overflow_x := divmod( width, image_width )
+
+	// resize height to same proportion as width
+	height := image_height * width / image_width
+  fmt.Printf( "   resize %v to %d x %d\n",   bounds, width, height )
+
+  zoom_y, overflow_y := divmod( height, image_height )
+	fmt.Printf( "     using zoom (x) %dx +%dpx, (y) %dx +%dpx overflow\n",
+	                        zoom_x, overflow_x,
+												  zoom_y, overflow_y)
+
+  base := tile
+
+  if zoom_x > 1 {
+		base = tile.Zoom( zoom_x )
+	}
+
+  img := NewImage( width, height )
+
+	startPoint  := image.Point{}
+	center_x, _ := divmod( overflow_x, 2 )
+	startPoint.X = center_x      // note: center (add padding/overflow left & right)
+	startPoint.Y = overflow_y    // note: anchor to bottom (if overflow)
+
+  rect := image.Rect( startPoint.X, startPoint.Y,
+		                    startPoint.X+img.Bounds().Dx(),
+		                    startPoint.Y+img.Bounds().Dy())
+
+	draw.Draw( img, rect, base, image.Point{0,0}, draw.Over )
+
+  return img
+}
+
+
+
+func mkdirs( path string ) {
+	// fmt.Println( "dirs: " + path )
+  if path == "." {
+	  return     // skip mkdir for current dir (e.g. .)
+  }
+
+  err := os.MkdirAll( path, 0755 )
+  if err != nil {
+		log.Fatalf( "failed to create directories >%s<: %#v", path, err )
+	}
+}
 
 func (tile *Image) Save( path string ) {
-
 	fmt.Printf( "  saving image to >%s<...\n", path )
 
-  // todo/check/fix!!!! - auto-create directories in path - why? why not?
+  // note: auto-create directories in path - why? why not?
+	mkdirs( filepath.Dir( path ) )
+
 	fout, err := os.Create( path )
 	if err != nil {
 		log.Fatal(err)
