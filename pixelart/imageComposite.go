@@ -162,3 +162,20 @@ func (composite *ImageComposite) Add( tile image.Image ) {
 }
 
 
+
+func (composite *ImageComposite) Strip() *Image {
+	count := 9     // make count into an optional parameter - why? why not?
+	// note: if count is 9 use a 9x1 grid and so on
+  strip := NewImageComposite( count, 1, &image.Point{composite.TileWidth,
+		                                                 composite.TileHeight})
+
+  // note:  check max count
+	safe_count := min( count, composite.Max() )
+
+  for i:=0; i<safe_count; i++ {
+     strip.Add( composite.Tile( i ) )
+	}
+
+	return &strip.Image
+}
+
