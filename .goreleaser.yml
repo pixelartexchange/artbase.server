@@ -35,9 +35,8 @@ builds:
   - linux_arm          # rasberry - linux arm 32-bit
   - windows_amd64
   - darwin_amd64
+  - darwin_arm64
   # - freebsd_amd64
-  # - darwin_arm64    - note: arm64 not working for now; sorry
-
 
 
 archives:
@@ -47,5 +46,9 @@ archives:
 
   # Can be used to change the archive formats for specific GOOS.
   format_overrides:
-  - goos: windows
-    format: zip
+    - goos: windows
+      format: zip
+  replacements:
+    amd64: 64bit
+    386: 32bit
+    darwin: macos
