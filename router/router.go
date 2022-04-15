@@ -132,6 +132,7 @@ func Param( req *http.Request, name string ) (string,bool) {
  return value, ok
 }
 
+// todo/check:  change to ParamUint - why? why not?
 func ParamInt( req *http.Request, name string ) (int,bool) {
 	value := 0    // default default_value to zero 0 for now
 	var err error
@@ -139,6 +140,7 @@ func ParamInt( req *http.Request, name string ) (int,bool) {
 	param, ok := Param( req, name )
 	if ok {
 		value, err = strconv.Atoi( param )
+		// value, err = strconv.ParseUint( param, 10, 0 )  // note: only allow natural/positive (0,1,2) numbers (not negative)
     if err != nil {
 			log.Panic( err )
 		}
@@ -160,13 +162,15 @@ func Query( req *http.Request, name string ) (string,bool) {
   return value, ok
 }
 
+// todo/check:  change to QueryUint - why? why not?
 func QueryInt( req *http.Request, name string ) (int,bool) {
   value := 0  // default default_value to 0 for now - why? why not?
   var err error
 
 	query, ok := Query( req, name )
   if ok {
-		value, err = strconv.Atoi( query )  // same as ParseInt( _, 10, 0 ) ??
+		value, err = strconv.Atoi( query )
+		// value, err = strconv.ParseUint( query, 10, 0 )  // note: only allow natural/positive (0,1,2) numbers (not negative)
     if err != nil {
 			log.Panic( err )
 		}

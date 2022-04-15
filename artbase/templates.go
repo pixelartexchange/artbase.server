@@ -49,12 +49,16 @@ const templateIndex = `
 </p>
 
 <h1>{{ .Name}}   ({{ .Width}}×{{ .Height}}) Collection
+{{if gt .Count 0 }}
+  ({{.Count}})
+{{end}}
 {{if .Background}}
 - Incl. Backgrounds
 {{end}}
 </h1>
 
 <p>
+<img src="/{{ .Name }}-strip.png" title="/{{ .Name }}-strip.png"> ...
 <span style="font-size: 80%">
 <a href="{{ .Url }}" title="@ {{ .Url }}">(Download .png)</a>
 </span>

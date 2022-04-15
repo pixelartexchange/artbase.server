@@ -8,11 +8,13 @@ package artbase
 var Collections = []Collection{
   {Name: "punks",     Width: 24, Height: 24,
 	 Path: "./punks.png",
-	 Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/punks.png" },
+	 Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/punks.png",
+	 Count: 10000 },
 
 	 {Name: "morepunks",  Width: 24, Height: 24,
 	 Path: "./morepunks.png",
-	 Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/morepunks.png" },
+	 Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/morepunks.png",
+	 Count: 1000 },
 
 	 {Name: "readymadepunks",  Width: 24, Height: 24,
 	 Path: "./readymadepunks.png",

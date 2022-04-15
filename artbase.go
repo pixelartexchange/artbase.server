@@ -32,6 +32,15 @@ func handleCollection( col artbase.Collection ) http.HandlerFunc  {
 	}
 }
 
+func handleCollectionStripPNG( col artbase.Collection ) http.HandlerFunc  {
+	return func( w http.ResponseWriter, req *http.Request ) {
+		b := col.HandleStripPNG()
+
+		w.Header().Set( "Content-Type", "image/png" )
+		w.Write( b )
+	}
+}
+
 
 
 func handleCollectionImagePNG( col artbase.Collection ) http.HandlerFunc  {
@@ -109,15 +118,26 @@ func handleCollectionImagePNG( col artbase.Collection ) http.HandlerFunc  {
 		opts.Zoom = zoom
 	}
 
-
-	save, ok := router.QueryBool( req,  "save" )
+	size, ok := router.QueryInt( req,  "size" )
 	if !ok {
-		save, ok = router.QueryBool( req,  "s" )  // allow shortcut s too
+		size, ok = router.QueryInt( req,  "s"  )  // allow shortcut s too
+	}
+
+  if size > 0 {
+		opts.Resize = size
+	}
+
+
+
+	save, ok := router.QueryBool( req,  "autosave" )
+	if !ok {
+		save, ok = router.QueryBool( req,  "save" )  // allow shortcut save too
 	}
 
   if save {
     opts.Save = true
 	}
+
 
 	b := col.HandleTilePNG( id, opts )
 
@@ -143,9 +163,9 @@ func handleCollectionImageSVG( col artbase.Collection ) http.HandlerFunc  {
 	   opts.Mirror = true
    }
 
-	 save, ok := router.QueryBool( req, "save" )
+	 save, ok := router.QueryBool( req, "autosave" )
 	 if !ok {
-		 save, ok = router.QueryBool( req, "s" )  // allow shortcut s too
+		 save, ok = router.QueryBool( req, "save" )  // allow shortcut save too
 	 }
 
   if save {
@@ -186,10 +206,11 @@ func main() {
 
 	serve.GET( "/",  handleHome( collections ) )
 
-	for i,c := range collections {
+	for i, c := range collections {
 		fmt.Printf( "  [%d] %s  %dx%d - %s\n", i, c.Name, c.Width, c.Height, c.Path )
 
 		serve.GET( "/" + c.Name,  handleCollection( c ) )
+		serve.GET( "/" + c.Name + "-strip.png", handleCollectionStripPNG( c ) )
 
 		// note - &c will NOT work - as c as reference gets
 		//          all handlers pointing to last collection!!!!

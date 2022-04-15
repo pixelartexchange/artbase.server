@@ -27,6 +27,7 @@ type PNGOpts struct {
 	 Mirror bool             // default: false
 	 Transparent bool        // default: false
 	 Zoom int                // default: FIX??? use 1 NOT 0 - how?
+	 Resize int              //  default:  0  (only specified if > 0)
 	 Save bool                // default: false
 	 Flag string              // default: ""
 }
@@ -42,6 +43,17 @@ func (col *Collection) HandleTilePNG( id int,
   if opts.Transparent {
     tile = tile.Transparent()
 	}
+
+	// todo/fix:  note - resize should exclude/ignore zoom or report error if specified
+	//   note: let resize go "first"
+	//         resize might add extra padding (left,right, top)
+	//           and if used with background later image gets "filled up" completely
+  if opts.Resize > 0 {
+		fmt.Printf( " resizing %dpx...\n", opts.Resize )
+		tile = tile.Resize( opts.Resize )
+	}
+
+
 
   if opts.Silhouette != nil {
     tile = tile.Silhouette( opts.Silhouette )
@@ -82,6 +94,9 @@ func (col *Collection) HandleTilePNG( id int,
 	if opts.Save {
 	  basename := fmt.Sprintf( "%s-%06d", name, id )
 
+		if opts.Resize > 0 {
+      basename = fmt.Sprintf( "%s@%dpx", basename, opts.Resize )
+		}
 		if opts.Zoom > 1 {
       basename = fmt.Sprintf( "%s@%dx", basename, opts.Zoom )
 		}
@@ -134,6 +149,23 @@ func (col *Collection) HandleTilePNG( id int,
 	               len( bytesTile ))
 
 	return bytesTile
+}
+
+
+func (col *Collection) HandleStripPNG() []byte  {
+
+  strip := col.Image().Strip()
+
+	buf := new( bytes.Buffer )
+	_ = png.Encode( buf, strip )
+
+	bytesStrip := buf.Bytes()
+  fmt.Printf( "%s-strip png %dx%d image - %d byte(s)\n",
+	               col.Name,
+	               strip.Bounds().Dx(), strip.Bounds().Dy(),
+	               len( bytesStrip ))
+
+	return bytesStrip
 }
 
 
