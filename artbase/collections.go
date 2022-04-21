@@ -73,11 +73,29 @@ var Collections = []Collection{
 	 Path: "./mooncatrescue.png",
    Url: "https://github.com/cryptocopycats/awesome-mooncatrescue-bubble/raw/master/i/mooncatrescue.png" },
 
+	 {Name: "moonbirds",  Width: 42, Height: 42,
+	  Path: "./moonbirds.png",
+    Url: "https://github.com/pixelartexchange/collections/raw/master/moonbirds/moonbirds-42x42.png",
+	  Count: 10000,
+	  Background: true },
+
+	 {Name: "moonbirdpunks",  Width: 50, Height: 50,
+	 Path: "./moonbirdpunks.png",
+   Url: "https://github.com/pixelartexchange/collections/raw/master/moonbirdpunks/moonbirdpunks-50x50.png",
+	 Count: 2469,
+	 Background: true },
+
 
 	 {Name: "wiener",  Width: 32, Height: 32,
 	 Path: "./wiener.png",
    Url: "https://github.com/pixelartexchange/collections/raw/master/wiener-32x32.png",
 	 Background: true },
+
+	 {Name: "gophers",  Width: 32, Height: 32,
+	 Path: "./gophers.png",
+   Url: "https://github.com/cryptopunksnotdead/lets-go-programming-cryptopunks/raw/master/gophers.png",
+	 Count: 35 },
+
 
 	 {Name: "rocks",  Width: 24, Height: 24,
 	 Path: "./rocks.png",
