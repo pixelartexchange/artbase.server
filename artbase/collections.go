@@ -73,16 +73,39 @@ var Collections = []Collection{
 	 Path: "./mooncatrescue.png",
    Url: "https://github.com/cryptocopycats/awesome-mooncatrescue-bubble/raw/master/i/mooncatrescue.png" },
 
+
+
+	 {Name: "moonbears",  Width: 34, Height: 34,
+	  Path: "./moonbears.png",
+    Url: "https://github.com/pixelartexchange/collections/raw/master/moonbears/moonbears-34x34.png",
+	  Count: 4000,
+	  Background: true },
+
 	 {Name: "moonbirds",  Width: 42, Height: 42,
 	  Path: "./moonbirds.png",
     Url: "https://github.com/pixelartexchange/collections/raw/master/moonbirds/moonbirds-42x42.png",
 	  Count: 10000,
 	  Background: true },
 
+	 {Name: "starbirds",  Width: 42, Height: 42,
+	  Path: "./starbirds.png",
+    Url: "https://github.com/pixelartexchange/collections/raw/master/starbirds/starbirds-42x42.png",
+	  Count: 3000,
+	  Background: true },
+
+
+
 	 {Name: "moonbirdpunks",  Width: 50, Height: 50,
 	 Path: "./moonbirdpunks.png",
    Url: "https://github.com/pixelartexchange/collections/raw/master/moonbirdpunks/moonbirdpunks-50x50.png",
 	 Count: 2469,
+	 Background: true },
+
+
+	 {Name: "8bits",  Width: 24, Height: 24,
+	 Path: "./8bits.png",
+   Url: "https://github.com/pixelartexchange/collections/raw/master/8bits/8bits-24x24.png",
+	 Count: 8888,
 	 Background: true },
 
 
@@ -99,11 +122,13 @@ var Collections = []Collection{
 
 	 {Name: "rocks",  Width: 24, Height: 24,
 	 Path: "./rocks.png",
-   Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/rocks.png" },
+   Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/rocks.png",
+	 Count: 100 },
 
 	 {Name: "punkrocks",  Width: 24, Height: 24,
 	 Path: "./punkrocks.png",
-   Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/punkrocks.png" },
+   Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/punkrocks.png",
+	 Count: 10 },
 
 }
 
