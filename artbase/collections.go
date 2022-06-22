@@ -83,6 +83,12 @@ var Collections = []Collection{
 	 Path: "./coolcats.png",
 	 Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/coolcats.png" },
 
+	 {Name: "luckycats",  Width: 32, Height: 32,
+	 Path: "./luckycats.png",
+	 Url: "https://github.com/cryptopunksnotdead/punks.sandbox/raw/master/luckycats/i/luckycats-32x32.png",
+	 Count: 9 },
+
+
 	 {Name: "mooncatrescue",  Width: 24, Height: 24,
 	 Path: "./mooncatrescue.png",
    Url: "https://github.com/cryptocopycats/awesome-mooncatrescue-bubble/raw/master/i/mooncatrescue.png" },
@@ -105,6 +111,11 @@ var Collections = []Collection{
 	 Background: true },
 
 
+
+	 {Name: "candybears",  Width: 24, Height: 24,
+	 Path: "./candybears.png",
+	 Url: "https://github.com/cryptopunksnotdead/punks.sandbox/raw/master/candybears/i/candybears-24x24.png",
+	 Count: 12 },
 
 
 	 {Name: "bears",  Width: 24, Height: 24,
