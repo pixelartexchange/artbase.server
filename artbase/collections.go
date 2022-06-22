@@ -34,6 +34,36 @@ var Collections = []Collection{
 	  Path: "./intlpunks.png",
     Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/intlpunks.png" },
 
+
+
+		{Name: "punkforce",  Width: 24, Height: 24,
+	  Path: "./punkforce.png",
+	  Url: "https://github.com/pixelartexchange/collections/raw/master/punkforce/punkforce-24x24.png",
+	  Background: true },
+
+		{Name: "cinemapunks",  Width: 24, Height: 24,
+	  Path: "./cinemapunks.png",
+	  Url: "https://github.com/pixelartexchange/collections/raw/master/cinemapunks/cinemapunks-24x24.png",
+	  Background: true },
+
+		{Name: "mafiapunks",  Width: 24, Height: 24,
+	  Path: "./mafiapunks.png",
+	  Url: "https://github.com/pixelartexchange/collections/raw/master/mafiapunks/mafiapunks-24x24.png",
+	  Background: true },
+
+		{Name: "youtubepunks",  Width: 24, Height: 24,
+	  Path: "./youtubepunks.png",
+	  Url: "https://github.com/pixelartexchange/collections/raw/master/youtubepunks/youtubepunks-24x24.png",
+	  Background: true },
+
+		{Name: "goodbyepunks",  Width: 24, Height: 24,
+	  Path: "./goodbyepunks.png",
+	  Url: "https://github.com/pixelartexchange/collections/raw/master/goodbyepunks/goodbyepunks-24x24.png",
+	  Background: true },
+
+
+
+
 		{Name: "boredapes",   Width: 28, Height: 28,
 	  Path: "./boredapes.png",
     Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/boredapes.png" },
@@ -53,6 +83,12 @@ var Collections = []Collection{
 	 Path: "./coolcats.png",
 	 Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/coolcats.png" },
 
+	 {Name: "mooncatrescue",  Width: 24, Height: 24,
+	 Path: "./mooncatrescue.png",
+   Url: "https://github.com/cryptocopycats/awesome-mooncatrescue-bubble/raw/master/i/mooncatrescue.png" },
+
+
+
 	 {Name: "doge",  Width: 24, Height: 24,
 	 Path: "./doge.png",
    Url: "https://github.com/cryptopunksnotdead/programming-cryptopunks/raw/master/i/doge.png" },
@@ -69,10 +105,12 @@ var Collections = []Collection{
 	 Background: true },
 
 
-	 {Name: "mooncatrescue",  Width: 24, Height: 24,
-	 Path: "./mooncatrescue.png",
-   Url: "https://github.com/cryptocopycats/awesome-mooncatrescue-bubble/raw/master/i/mooncatrescue.png" },
 
+
+	 {Name: "bears",  Width: 24, Height: 24,
+	  Path: "./bears.png",
+    Url: "https://github.com/pixelartexchange/collections/raw/master/bears/bears-24x24.png",
+	  Background: true },
 
 
 	 {Name: "moonbears",  Width: 34, Height: 34,
@@ -81,11 +119,35 @@ var Collections = []Collection{
 	  Count: 4000,
 	  Background: true },
 
+
+
+		{Name: "lilmoonbirdies",  Width: 24, Height: 24,
+	  Path: "./lilmoonbirdies.png",
+    Url: "https://github.com/pixelartexchange/collections/raw/master/lilmoonbirdies/lilmoonbirdies-24x24.png",
+	  Count: 10000,
+	  Background: true },
+
 	 {Name: "moonbirds",  Width: 42, Height: 42,
 	  Path: "./moonbirds.png",
     Url: "https://github.com/pixelartexchange/collections/raw/master/moonbirds/moonbirds-42x42.png",
 	  Count: 10000,
 	  Background: true },
+
+		{Name: "fastfoodbirds-i",  Width: 42, Height: 42,
+	  Path: "./fastfoodbirds-i.png",
+    Url: "https://github.com/pixelartexchange/collections/raw/master/fastfoodmoonbirds/fastfoodmoonbirds-42x42.png",
+	  Background: true },
+
+		{Name: "fastfoodbirds-ii",  Width: 42, Height: 42,
+	  Path: "./fastfoodbirds-ii.png",
+    Url: "https://github.com/pixelartexchange/collections/raw/master/fastfoodmoonbirds-ii/fastfoodmoonbirds-ii-42x42.png",
+	  Background: true },
+
+		{Name: "fastfoodbirds-iii",  Width: 42, Height: 42,
+	  Path: "./fastfoodbirds-iii.png",
+    Url: "https://github.com/pixelartexchange/collections/raw/master/fastfoodmoonbirds-iii/fastfoodmoonbirds-iii-42x42.png",
+	  Background: true },
+
 
 	 {Name: "starbirds",  Width: 42, Height: 42,
 	  Path: "./starbirds.png",
@@ -107,6 +169,24 @@ var Collections = []Collection{
    Url: "https://github.com/pixelartexchange/collections/raw/master/8bits/8bits-24x24.png",
 	 Count: 8888,
 	 Background: true },
+
+	 {Name: "blockheads",  Width: 25, Height: 25,
+	 Path: "./blockheads.png",
+   Url: "https://github.com/pixelartexchange/collections/raw/master/blockheads-25x25.png",
+	 Background: true },
+
+	 {Name: "nouns",  Width: 32, Height: 32,
+	 Path: "./nouns.png",
+   Url: "https://github.com/pixelartexchange/collections/raw/master/nouns-32x32.png",
+	 Background: true },
+
+
+
+	 {Name: "womenpixies",  Width: 98, Height: 98,
+	 Path: "./womenpixies.png",
+   Url: "https://github.com/pixelartexchange/collections/raw/master/womenpixies/womenpixies-98x98.png",
+	 Background: true },
+
 
 
 	 {Name: "wiener",  Width: 32, Height: 32,
