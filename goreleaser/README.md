@@ -2,7 +2,7 @@
 
 
 
-## Punk's Not Dead (Pixe Art) Under Attack
+## Punk's Not Dead (Pixel Art) Under Attack
 
 -  Programming Pixel Punk Profile Pictures & (Generative) Art with Go
  see <https://github.com/cryptopunksnotdead/lets-go-programming-cryptopunks>
@@ -21,7 +21,7 @@ Backup / Mirror at Gitlab
 ## How-To Cross-Compile Go Programs for Window, Mac OS, and Linux
 
 Cross-Compile == Build Go Programs / Applications for Different Operation Systems (`GOOS`) and 
-(Processor) Architectures (`GOARCH`)
+(Processor) Architectures (`GOARCH`) e.g. build Mac OS on Windows or  Windows on Linux etc.
 
 
 Q: Cross-Compile!?
@@ -30,7 +30,6 @@ Q: Cross-Compile!?
 > such as Windows, Mac OS, and Linux 
 > by using the `GOOS` and `GOARCH` environmental variables.
 
-Cross-Compile  -  build Mac OS on Windows or  Windows on Linux etc.
 
 Q: What is GOOS and GOARCH?
 
@@ -68,7 +67,7 @@ resulting in (sorted a-z):
 
 Q What values for GOOS and GOARCH possible?
 
-      $ go go tool dist list
+      $ go tool dist list
 
 resulting in:
 
