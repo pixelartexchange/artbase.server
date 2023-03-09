@@ -65,7 +65,7 @@ resulting in (sorted a-z):
      go version go1.18 windows/amd64 
 
 
-Q What values for GOOS and GOARCH possible?
+Q: What values for GOOS and GOARCH possible?
 
       $ go tool dist list
 
