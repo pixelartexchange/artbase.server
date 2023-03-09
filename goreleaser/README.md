@@ -37,7 +37,7 @@ Q: What is GOOS and GOARCH?
 > while `GOARCH` refers to the (processor) architecture (386, amd64, arm64, etc.) to build for. 
 
 
-Q: How-To Find out you GOOS and GOARCH values?
+Q: How-to find out your GOOS and GOARCH values?
 
       $ go env GOOS
       windows 
