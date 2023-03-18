@@ -1,9 +1,11 @@
-package artbase
+package serve
 
 import (
 	"html/template"
 	"bytes"
 	"fmt"
+
+	"github.com/pixelartexchange/artbase.server/artbase"
 )
 
 
@@ -145,7 +147,7 @@ var Templates = make( map[string]*template.Template )
 
 
 func init() {
-	fmt.Println( "  [artbase.init] compileTemplates" )
+	fmt.Println( "  [serve.init] compileTemplates" )
   compileTemplates()
 }
 
@@ -156,14 +158,16 @@ func compileTemplates() {
 
 
 
-func RenderHome( data []Collection ) []byte {
+
+
+func renderHome( data []artbase.Collection ) []byte {
 	buf := new( bytes.Buffer )
 	Templates["home"].Execute( buf, data )
 	return buf.Bytes()
 }
 
 
-func RenderCollection( data *Collection ) []byte {
+func renderCollection( data *artbase.Collection ) []byte {
 	buf := new( bytes.Buffer )
 	Templates["index"].Execute( buf, data )
 	return buf.Bytes()
