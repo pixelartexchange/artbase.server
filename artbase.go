@@ -6,9 +6,9 @@ import (
 	"os"
 	"net/http"
 
-	"github.com/pixelartexchange/artbase.server/artbase"
-	"github.com/pixelartexchange/artbase.server/pixelart"
+	"github.com/learnpixelart/pixelart.go/pixelart"
 
+	"github.com/pixelartexchange/artbase.server/artbase"
 	"github.com/pixelartexchange/artbase.server/router"     // simple http router & helpers from scratch (no 3rd party deps) - replace with your own http libs/frameworks
 )
 
