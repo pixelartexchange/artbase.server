@@ -1,4 +1,7 @@
-# Vienna Go (Lang) Talk Notes - GoReleaser
+# GoReleaser Talk Notes
+
+- Vienna Go (Lang) Meetup March 2023  @ fiskaly
+
 
 
 
@@ -7,7 +10,7 @@
 -  Programming Pixel Punk Profile Pictures & (Generative) Art with Go
  see <https://github.com/cryptopunksnotdead/lets-go-programming-cryptopunks>
 
-More Under Attack Updates 
+More Under Attack Updates
 - <https://github.com/cryptopunksnotdead/.github>
 - <https://old.reddit.com/r/cryptopunksdev>
 
@@ -20,31 +23,31 @@ Backup / Mirror at Gitlab
 
 ## How-To Cross-Compile Go Programs for Window, Mac OS, and Linux
 
-Cross-Compile == Build Go Programs / Applications for Different Operation Systems (`GOOS`) and 
+Cross-Compile == Build Go Programs / Applications for Different Operation Systems (`GOOS`) and
 (Processor) Architectures (`GOARCH`) e.g. build Mac OS on Windows or  Windows on Linux etc.
 
 
 Q: Cross-Compile!?
 
-> Programs written in Go can easily be compiled for a wide variety of target operating systems 
-> such as Windows, Mac OS, and Linux 
+> Programs written in Go can easily be compiled for a wide variety of target operating systems
+> such as Windows, Mac OS, and Linux
 > by using the `GOOS` and `GOARCH` environmental variables.
 
 
 Q: What is GOOS and GOARCH?
 
-> `GOOS` refers to the operating system (Linux, Windows, BSD, etc.), 
-> while `GOARCH` refers to the (processor) architecture (386, amd64, arm64, etc.) to build for. 
+> `GOOS` refers to the operating system (Linux, Windows, BSD, etc.),
+> while `GOARCH` refers to the (processor) architecture (386, amd64, arm64, etc.) to build for.
 
 
 Q: How-to find out your GOOS and GOARCH values?
 
       $ go env GOOS
-      windows 
+      windows
       $ go env GOARCH
       amd64
       $ go env GOOS GOARCH
-      windows 
+      windows
       amd64
 
 or
@@ -62,7 +65,7 @@ resulting in (sorted a-z):
  or
 
      $ go version
-     go version go1.18 windows/amd64 
+     go version go1.18 windows/amd64
 
 
 Q: What values for GOOS and GOARCH possible?
@@ -132,15 +135,15 @@ import(
 )
 
 func main() {
-    fmt.Printf( "OS: %s\nArchitecture: %s\n", 
-         runtime.GOOS, 
+    fmt.Printf( "OS: %s\nArchitecture: %s\n",
+         runtime.GOOS,
          runtime.GOARCH)
 }
 ```
 
 build  (64-bit binary)
 
-      $ go build hello.go       
+      $ go build hello.go
 
 run
 
@@ -154,7 +157,7 @@ build (32-bit binary)
       $ set GOARCH=386
       $ go build hello.go
 
-run 
+run
 
       $ hello
       OS: windows
@@ -166,23 +169,23 @@ build (linux binary on windows)
      $ set GOARCH=386
      $ go build hello.go
 
-run 
+run
 
      $ hello
-     
-     > This version of hello is not compatible with the version of Windows you're running. 
+
+     > This version of hello is not compatible with the version of Windows you're running.
      > Check your computer's system information and then contact the software publisher.
 
 
-Note: You CAN run the the binary / executable 
-only on the target platform (e.g. on Window, Linux, Mac OS, etc.) - 
+Note: You CAN run the the binary / executable
+only on the target platform (e.g. on Window, Linux, Mac OS, etc.) -
 out the other end only runs on OS X, and cannot be run on
 
 
-Cross-compile in unix shell:  
+Cross-compile in unix shell:
 
      $ GOOS=linux GOARCH=386 go build hello.go
-     
+
      $ GOOS=darwin GOARCH=arm64 go build hello.go
      ..
 
@@ -194,7 +197,7 @@ see <https://github.com/pixelartexchange/artbase.server>
 
 Download Releases (Binaries) On Github
 
-see <https://github.com/pixelartexchange/artbase.server/releases>  
+see <https://github.com/pixelartexchange/artbase.server/releases>
 
 Example:
 
@@ -206,7 +209,7 @@ Example:
 
 
 
-Automate, Automate, Automate  
+Automate, Automate, Automate
 
 via GitHub Actions & GoReleaser
 
@@ -238,7 +241,7 @@ see <https://github.com/pixelartexchange/artbase.server/tags>
 
 only "local" - to trigger goreleaser push tags to github (upstream)
 
-    $  git push origin --tags     
+    $  git push origin --tags
       or
     $  git push origin v0.0.5
     $  git push origin v1.0.0
