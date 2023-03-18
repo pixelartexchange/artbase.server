@@ -1,11 +1,14 @@
-package artbase
+package collections
+
+import (
+	"github.com/pixelartexchange/artbase.server/artbase"
+)
 
 
 ///////
 //  default "standard" builtin collections for easy (re)use
 
-
-var Collections = []Collection{
+var Standard = []artbase.Collection{
   {Name: "punks",     Width: 24, Height: 24,
 	 Path: "./punks.png",
 	 Url: "https://github.com/cryptopunksnotdead/awesome-24px/raw/master/collection/punks.png",

@@ -9,6 +9,7 @@ import (
 	"github.com/learnpixelart/pixelart.go/pixelart"
 
 	"github.com/pixelartexchange/artbase.server/artbase"
+	"github.com/pixelartexchange/artbase.server/artbase/collections"
 	"github.com/pixelartexchange/artbase.server/router"     // simple http router & helpers from scratch (no 3rd party deps) - replace with your own http libs/frameworks
 )
 
@@ -195,7 +196,9 @@ func main() {
 	//// note:
 	// use built-in "standard" collections for now,
 	//   yes, you can - use / set-up your own collections
-	collections := artbase.Collections
+	// collections := collections.Standard
+	collections := collections.Ordinals
+
 
 	fmt.Printf( "%d collection(s):\n", len( collections ))
 	fmt.Println( collections )
