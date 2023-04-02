@@ -13,7 +13,7 @@ import (
 
 
 
-func handleCollectionImagePNG( col artbase.Collection ) http.HandlerFunc  {
+func handleCollectionImagePNG( col *artbase.Collection ) http.HandlerFunc  {
 		return func( w http.ResponseWriter, req *http.Request ) {
 
 	id, _ := router.ParamInt( req, "id" )

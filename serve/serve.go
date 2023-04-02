@@ -13,7 +13,7 @@ import (
 )
 
 
-func handleHome( collections []artbase.Collection ) http.HandlerFunc  {
+func handleHome( collections []*artbase.Collection ) http.HandlerFunc  {
   return func( w http.ResponseWriter, req *http.Request ) {
 		 b := renderHome( collections )
 
@@ -22,16 +22,16 @@ func handleHome( collections []artbase.Collection ) http.HandlerFunc  {
 		}
 }
 
-func handleCollection( col artbase.Collection ) http.HandlerFunc  {
+func handleCollection( col *artbase.Collection ) http.HandlerFunc  {
   return func( w http.ResponseWriter, req *http.Request ) {
-		 b := renderCollection( &col )
+		 b := renderCollection( col )
 
 		 w.Header().Set( "Content-Type", "text/html; charset=utf-8" )
 		 w.Write( b )
 	}
 }
 
-func handleCollectionStripPNG( col artbase.Collection ) http.HandlerFunc  {
+func handleCollectionStripPNG( col *artbase.Collection ) http.HandlerFunc  {
 	return func( w http.ResponseWriter, req *http.Request ) {
 		b := col.HandleStripPNG()
 
@@ -43,7 +43,7 @@ func handleCollectionStripPNG( col artbase.Collection ) http.HandlerFunc  {
 
 
 
-func NewRouter( collections []artbase.Collection ) *router.Router {
+func NewRouter( collections []*artbase.Collection ) *router.Router {
 
   //////
 	// for debugging and double check on module print version strings

@@ -160,7 +160,7 @@ func compileTemplates() {
 
 
 
-func renderHome( data []artbase.Collection ) []byte {
+func renderHome( data []*artbase.Collection ) []byte {
 	buf := new( bytes.Buffer )
 	Templates["home"].Execute( buf, data )
 	return buf.Bytes()

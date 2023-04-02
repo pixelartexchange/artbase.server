@@ -7,8 +7,7 @@ import (
 	"net/http"
 
 
-	// "github.com/pixelartexchange/artbase.server/artbase"
-	"github.com/pixelartexchange/artbase.server/artbase/collections"
+	"github.com/pixelartexchange/artbase.server/artbase"
 	"github.com/pixelartexchange/artbase.server/serve"
 )
 
@@ -17,11 +16,13 @@ import (
 func main() {
 
 	//// note:
-	// use built-in "standard" collections for now,
+	// download "standard" collections for now,
 	//   yes, you can - use / set-up your own collections
 
-	 collections := collections.Standard
-	 // collections := collections.Ordinals
+  	url := "https://github.com/pixelartexchange/artbase.server/raw/master/collections.csv"
+   	// url := "https://github.com/pixelartexchange/ordbase.server/raw/master/collections.csv"
+
+		collections := artbase.DownloadCollections( url )
 
 	serve := serve.NewRouter( collections )
 

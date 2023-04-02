@@ -51,7 +51,7 @@ The pixel art collections pre-configured include:
 - [coolcats](https://github.com/cryptopunksnotdead/awesome-24px/blob/master/collection/coolcats.png)  (24x24)
 - [mooncatresuce](https://github.com/cryptocopycats/awesome-mooncatrescue-bubble/blob/master/i/mooncatrescue.png)  (24x24)
 - [boredapes](https://github.com/cryptopunksnotdead/awesome-24px/blob/master/collection/boredapes.png)  (28x28)
-- And more
+- And more   - see [collections.csv »](collections.csv)
 
 
 

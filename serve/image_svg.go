@@ -14,7 +14,7 @@ import (
 
 
 
-func handleCollectionImageSVG( col artbase.Collection ) http.HandlerFunc  {
+func handleCollectionImageSVG( col *artbase.Collection ) http.HandlerFunc  {
   return func( w http.ResponseWriter, req *http.Request ) {
 
   id, _ := router.ParamInt( req, "id" )
