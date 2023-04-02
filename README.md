@@ -43,7 +43,8 @@ pixel art collections (using all-in-one image composites)
 to your working directory and use the "cached" version from the next time on (incl. server restarts).
 
 
-The pixel art collections pre-configured include:
+
+The pixel art collections pre-configured¹ include:
 
 - [punks](https://github.com/cryptopunksnotdead/awesome-24px/blob/master/collection/punks.png) (24x24)
 - [morepunks](https://github.com/cryptopunksnotdead/awesome-24px/blob/master/collection/morepunks.png) (24x24)
@@ -51,8 +52,10 @@ The pixel art collections pre-configured include:
 - [coolcats](https://github.com/cryptopunksnotdead/awesome-24px/blob/master/collection/coolcats.png)  (24x24)
 - [mooncatresuce](https://github.com/cryptocopycats/awesome-mooncatrescue-bubble/blob/master/i/mooncatrescue.png)  (24x24)
 - [boredapes](https://github.com/cryptopunksnotdead/awesome-24px/blob/master/collection/boredapes.png)  (28x28)
-- And more   - see [collections.csv »](collections.csv)
+- And many more
 
+
+¹: see [collections.csv](collections.csv)
 
 
 
