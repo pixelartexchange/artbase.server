@@ -1,11 +1,6 @@
-package collections
-
-import (
-	"github.com/pixelartexchange/artbase.server/artbase"
-)
 
 
-var Ordinals = []artbase.Collection{
+var Ordinals = []*artbase.Collection{
 
   {Name: "ordinalpunks",     Width: 24, Height: 24,
 	 Path: "./ordinalpunks.png",
