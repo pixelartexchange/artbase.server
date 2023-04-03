@@ -10,7 +10,7 @@ Find the archives to download  - about 3 Megabytes (MB) - for Windows, Linux and
 Unpack the archive (e.g. `artbase-*.tar.gz` or `artbase-*.zip`) and than start / run the binary:
 
 ```
-$ artbase
+$ artbased
 ```
 
 This will start-up a (web) server (listening on port 8080). To test open up `http://localhost:8080` in your browser (to get the index web page listing all collections).
@@ -22,14 +22,14 @@ This will start-up a (web) server (listening on port 8080). To test open up `htt
 Use / issue / type  (in the `/artbase.server` directory):
 
 ```
-$ go build artbase.go
+$ go build artbased.go
 ```
 
 to get a zero-config x-copy binary for your operation system / architecture.
 To run use:
 
 ```
-$ artbase
+$ artbased
 ```
 
 This will start-up a (web) server (listening on port 8080). To test open up `http://localhost:8080` in your browser (to get the index web page listing all collections).
@@ -56,6 +56,14 @@ The pixel art collections pre-configured¹ include:
 
 
 ¹: see [collections.csv](collections.csv)
+
+
+
+Note:  You can use your own collections  - use the `-c/--config` flag
+and pass along a file path or a web url to the collection dataset in
+the comma-separated values (.csv) format e.g.  `$ artbased --config ./collections.csv`.
+
+
 
 
 
