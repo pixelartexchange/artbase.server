@@ -4,23 +4,6 @@
 
 
 
-
-## Punk's Not Dead (Pixel Art) Under Attack
-
--  Programming Pixel Punk Profile Pictures & (Generative) Art with Go
- see <https://github.com/cryptopunksnotdead/lets-go-programming-cryptopunks>
-
-More Under Attack Updates
-- <https://github.com/cryptopunksnotdead/.github>
-- <https://old.reddit.com/r/cryptopunksdev>
-
-
-Backup / Mirror at Gitlab
-- see <https://gitlab.com/cryptopunksnotdead/lets-go-programming-cryptopunks>
-
-
-
-
 ## How-To Cross-Compile Go Programs for Window, Mac OS, and Linux
 
 Cross-Compile == Build Go Programs / Applications for Different Operation Systems (`GOOS`) and
